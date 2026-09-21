@@ -786,7 +786,7 @@ python tools/build_release.py
 </tr>
 <tr>
 <td>Automatic data setup</td>
-<td>Offline tests cover verified extraction, reuse, corrupt archives, unsafe archive paths and interrupted downloads. All 48 existing models and installed CSFD maps were checked by the real setup command.</td>
+<td>Offline tests cover verified extraction, reuse, corrupt archives, unsafe archive paths and interrupted downloads. A fresh setup using the private GitHub Release downloaded, extracted and verified all 48 checkpoints. Existing CSFD maps were checked; a new CSFD network download was not repeated.</td>
 </tr>
 <tr>
 <td>In-app documentation</td>
@@ -794,7 +794,7 @@ python tools/build_release.py
 </tr>
 <tr>
 <td>Git installation</td>
-<td>pip installation from a temporary local Git repository passed; installed CLI modules, GUI and bundled resources loaded outside the checkout. Remote GitHub installation awaits repository access and publication; dependencies were reused from the tested environment.</td>
+<td>pip installation from a temporary local Git repository and the private GitHub v1.1.0rc1 tag passed. Installed GUI documentation and all modality model paths were checked outside the checkout. Dependencies were reused from the tested environment; this is not a fresh dependency-resolution test.</td>
 </tr>
 <tr>
 <td>Python wheel</td>

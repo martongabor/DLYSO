@@ -157,6 +157,10 @@ python -m pip install -e &quot;.[gui]&quot;
 <p>For a useful bug report include the software version, OS, Python version, selected channels, the relevant sanitized log excerpt and a minimal non-sensitive input example. Do not include private catalogues by default.</p></section><section id="github_install"><h1 id="github-installation">GitHub installation</h1>
 <h2 id="install-the-application">Install the application</h2>
 <p>Install Python 3.10 or newer and Git. For this private repository, first sign in with GitHub CLI (<code>gh auth login</code>) and configure Git access (<code>gh auth setup-git</code>).</p>
+<p>On Ubuntu/Debian, install the Qt system libraries before starting the GUI:</p>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install -y libegl1 libopengl0
+</code></pre>
 <p>Create and activate a virtual environment, then install the application and data:</p>
 <pre><code class="language-bash">python -m pip install &quot;dlyso-pipeline[gui] @ git+https://github.com/martongabor/DLYSO.git&quot;
 dlyso-setup

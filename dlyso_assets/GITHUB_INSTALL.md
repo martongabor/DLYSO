@@ -4,6 +4,13 @@
 
 Install Python 3.10 or newer and Git. For this private repository, first sign in with GitHub CLI (`gh auth login`) and configure Git access (`gh auth setup-git`).
 
+On Ubuntu/Debian, install the Qt system libraries before starting the GUI:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libegl1 libopengl0
+```
+
 Create and activate a virtual environment, then install the application and data:
 
 ```bash

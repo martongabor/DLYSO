@@ -85,6 +85,8 @@ def test_sorting_keeps_source_detail_consistent(window, tmp_path):
     assert window.source_title.text() == window.table.model().frame.iloc[selected]["Source"]
     window.results = pd.DataFrame()
     window._filter_results()
+    assert window.table.model().headerData(5, Qt.Orientation.Horizontal) is None
+    assert window.table.model().headerData(-1, Qt.Orientation.Horizontal) is None
     assert window.source_title.text() == "Source detail"
     assert not window.scores.toPlainText()
 

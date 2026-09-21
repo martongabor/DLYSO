@@ -231,6 +231,9 @@ class CatalogueModel(QAbstractTableModel):
         return None
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
+        count = len(self.frame.columns) if orientation == Qt.Orientation.Horizontal else len(self.frame)
+        if not 0 <= section < count:
+            return None
         if role == Qt.ItemDataRole.DisplayRole:
             return str(self.frame.columns[section]) if orientation == Qt.Orientation.Horizontal else str(section + 1)
 

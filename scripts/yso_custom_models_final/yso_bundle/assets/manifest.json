@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "models": {
+    "dtdm": {
+      "rca": {
+        "config": "rca_dtdm.json",
+        "state_dict": "rca_dtdm.pt"
+      },
+      "resnet": {
+        "config": "resnet_dtdm.json",
+        "state_dict": "resnet_dtdm.pt"
+      }
+    },
+    "allwise": {
+      "rca": {
+        "config": "rca_allwise.json",
+        "state_dict": "rca_allwise.pt"
+      },
+      "resnet": {
+        "config": "resnet_allwise.json",
+        "state_dict": "resnet_allwise.pt"
+      }
+    },
+    "sed": {
+      "rca": {
+        "config": "rca_sed.json",
+        "state_dict": "rca_sed.pt"
+      },
+      "resnet": {
+        "config": "resnet_sed.json",
+        "state_dict": "resnet_sed.pt"
+      }
+    },
+    "sedr": {
+      "rca": {
+        "config": "rca_sedr.json",
+        "state_dict": "rca_sedr.pt"
+      },
+      "resnet": {
+        "config": "resnet_sedr.json",
+        "state_dict": "resnet_sedr.pt"
+      }
+    }
+  }
+}

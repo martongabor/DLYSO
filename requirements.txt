@@ -1,0 +1,11 @@
+numpy>=1.24
+pandas>=2.0
+Pillow>=9.5
+matplotlib>=3.7
+astropy>=5.3
+astroquery>=0.4.7
+dustmaps>=1.0.13
+tqdm>=4.65
+torch>=2.1
+torchvision>=0.16
+requests>=2.31

@@ -1,0 +1,30 @@
+name: Software checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12']
+    env:
+      QT_QPA_PLATFORM: offscreen
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m ruff check .
+      - run: python -m pytest -q
+      - run: python -m build
+      - name: Verify Git installation
+        run: |
+          python -m pip install --force-reinstall --no-deps --no-build-isolation "dlyso-pipeline[gui] @ git+file://${GITHUB_WORKSPACE}"
+          python -I -c "import dlyso, dlyso_ui; from pathlib import Path; root = Path(dlyso.__file__).parent; assert (root / 'dlyso_assets/reference.html').is_file(); assert (root / 'scripts/class.py').is_file()"
+          dlyso --version

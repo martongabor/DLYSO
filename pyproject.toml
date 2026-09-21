@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dlyso-pipeline"
+version = "1.1.0rc1"
+description = "A desktop and command-line workspace for multi-modal young stellar object classification"
+readme = "README.md"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Repository = "https://github.com/martongabor/DLYSO"
+Issues = "https://github.com/martongabor/DLYSO/issues"
+Documentation = "https://github.com/martongabor/DLYSO#readme"
+
+[project.optional-dependencies]
+gui = ["PySide6>=6.6,<7"]
+dev = ["pytest>=7.4", "ruff>=0.5", "build>=1.2", "markdown>=3.5", "PySide6>=6.6,<7"]
+visualization = ["healpy>=1.16", "plotly>=5", "scipy>=1.10"]
+
+[project.scripts]
+dlyso = "dlyso:main"
+dlyso-doctor = "dlyso_doctor:main"
+dlyso-setup = "dlyso_setup:main"
+
+[project.gui-scripts]
+dlyso-gui = "dlyso_ui:main"
+
+[tool.setuptools]
+py-modules = ["dlyso", "dlyso_runtime", "dlyso_workflow", "dlyso_engine", "dlyso_ui", "dlyso_doctor", "dlyso_setup"]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["scripts*", "dlyso_assets*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"scripts.yso_custom_models_final.yso_bundle" = ["assets/*.json"]
+dlyso_assets = ["*.md", "*.html", "*.csv", "*.json", "*.png"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["make_local_bubble_3d.py", "analyze_sed_filters.py"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/make_sed_plots.py" = ["E402"]
+"scripts/customclass.py" = ["E402"]
+"scripts/class.py" = ["E402"]
+"scripts/make_sed_rplots.py" = ["E402"]
+"tests/test_desktop.py" = ["E402"]
+"tools/*.py" = ["E402"]

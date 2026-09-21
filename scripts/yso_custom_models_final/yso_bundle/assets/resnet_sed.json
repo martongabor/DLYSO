@@ -1,0 +1,36 @@
+{
+  "task": "binary_yso_vs_other",
+  "product": "sed",
+  "product_dir": "SEDplot",
+  "model": "resnet",
+  "arch": "SmallResNet",
+  "class_to_idx": {
+    "other": 0,
+    "YSO": 1
+  },
+  "probability": "sigmoid(logit)",
+  "preprocess": {
+    "target_size": [
+      190,
+      190
+    ],
+    "as_gray": true,
+    "normalize_01": true,
+    "invert": false,
+    "binarize": false
+  },
+  "model_kwargs": {
+    "in_channels": 1,
+    "num_classes": 1,
+    "base_width": 32,
+    "max_width": 128,
+    "use_maxpool": false,
+    "blocks_per_stage": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  "asset_state_dict": "resnet_sed.pt"
+}

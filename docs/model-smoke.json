@@ -1,0 +1,574 @@
+{
+  "device": "cpu",
+  "input": "synthetic zeros; not an accuracy test",
+  "models": [
+    {
+      "file": "AllWISE_efficientnet_b0_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_efficientnet_v2_s_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_mnasnet0_5_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_mobilenet_v3_small_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_regnet_y_400mf_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_resnet18_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_resnet50_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_resnext50_32x4d_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_shufflenet_v2_x0_5_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "AllWISE_squeezenet1_1_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_efficientnet_b0_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_efficientnet_v2_s_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_mnasnet0_5_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_mobilenet_v3_small_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_regnet_y_400mf_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_resnet18_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_resnet50_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_resnext50_32x4d_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_shufflenet_v2_x0_5_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "DTDM_squeezenet1_1_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_efficientnet_b0_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_efficientnet_v2_s_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_mnasnet0_5_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_mobilenet_v3_small_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_regnet_y_400mf_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_resnet18_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_resnet50_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_resnext50_32x4d_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_shufflenet_v2_x0_5_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDplot_squeezenet1_1_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_efficientnet_b0_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_efficientnet_v2_s_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_mnasnet0_5_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_mobilenet_v3_small_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_regnet_y_400mf_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_resnet18_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_resnet50_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_resnext50_32x4d_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_shufflenet_v2_x0_5_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "SEDrplot_squeezenet1_1_best.pt",
+      "shape": [
+        1,
+        2
+      ],
+      "image_size": 224,
+      "classes": [
+        "YSO",
+        "other"
+      ],
+      "yso_index": 0
+    },
+    {
+      "file": "resnet_sed.pt",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "file": "rca_sed.pt",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "file": "resnet_sedr.pt",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "file": "rca_sedr.pt",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "file": "resnet_allwise.pt",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "file": "rca_allwise.pt",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "file": "resnet_dtdm.pt",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "file": "rca_dtdm.pt",
+      "shape": [
+        1
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+.env
+myrun/
+runs/
+wget-log*
+# Build products and release-only model binaries
+build/
+dist/
+*.egg-info/
+scripts/models/*.pt
+scripts/yso_custom_models_final/yso_bundle/assets/*.pt
+# Local analysis outputs outside the DLYSO release
+sed_filter_analysis/
+local_bubble_yso_3d.html
+local_bubble_yso_3d_preview.png
+# Local activity logs must not be committed
+*.log

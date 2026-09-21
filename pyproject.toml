@@ -57,6 +57,9 @@ line-length = 120
 target-version = "py310"
 extend-exclude = ["make_local_bubble_3d.py", "analyze_sed_filters.py"]
 
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+
 [tool.ruff.lint.per-file-ignores]
 "scripts/make_sed_plots.py" = ["E402"]
 "scripts/customclass.py" = ["E402"]

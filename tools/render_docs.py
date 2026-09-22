@@ -50,6 +50,7 @@ def main():
     sources = [
         "USER_GUIDE",
         "GITHUB_INSTALL",
+        "PAPER",
         "CLI_REFERENCE",
         "OUTPUT_SCHEMA",
         "MODEL_CARD",

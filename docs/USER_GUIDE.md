@@ -1,8 +1,10 @@
 # DLYSO user guide
 
-DLYSO is the software accompanying the **NGYSO I** paper.
+DLYSO (deep learning young stellar object identification) is the companion software to **NGYSO I**, *The NEMESIS general YSO catalogue. I. Supervised classification with deep learning methods* by Marton et al. (2026), accepted for publication in *Astronomy & Astrophysics*.
 
-DLYSO classifies candidate young stellar objects (YSOs) using survey photometry, images and light curves. It takes a catalogue of coordinates and saves individual model scores. Scores require scientific validation before use for source selection.
+Developed within the NEMESIS project, DLYSO applies image-based deep learning to the identification of young stellar objects. It retrieves archival photometry, AllWISE infrared images and ZTF light curves, constructs four complementary input representations, and evaluates them with standard and custom convolutional neural networks. The desktop and command-line interfaces bring this workflow to user-supplied source catalogues, preserving individual model scores, per-channel votes and data-coverage information.
+
+For the full reference and BibTeX entry, see [Scientific context and citation](PAPER.md). Cite NGYSO I and report the DLYSO version or commit when using the software in research.
 
 ## Installation
 

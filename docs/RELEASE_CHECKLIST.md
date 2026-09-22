@@ -4,13 +4,13 @@ The release candidate is not ready for public distribution until the items below
 
 ## Maintainer decisions still required
 
-- Confirm the author name, affiliation and preferred citation.
+- The NGYSO I paper authors and accepted-paper reference are documented in [Scientific context and citation](PAPER.md) and `CITATION.bib`; finalize software-specific contributor credits separately.
 - Select and approve the software license; no open-source permission is implied by this release candidate.
 - Confirm model ownership and redistribution terms for all 48 checkpoints. Code and model licenses may differ.
-- Provide the public repository URL and release/archive location. Do not invent a DOI.
-- Complete the model-card evidence before publishing accuracy or scientific selection claims.
+- Repository: https://github.com/martongabor/DLYSO. Confirm public distribution readiness and add the paper DOI and final journal details when assigned.
+- Attribute scientific performance to the NGYSO I evaluation; complete the release-specific reproducibility record described in the model card.
 
-A real `LICENSE` and `CITATION.cff` should be added after those decisions. Do not publish placeholder authors, invented metrics or an unassigned DOI.
+The paper reference is supplied in `CITATION.bib`. Add `LICENSE` after the license decision and software-specific `CITATION.cff` metadata once contributor credits are finalized. Do not invent an unassigned DOI.
 
 ## Software checks
 

@@ -28,6 +28,7 @@ def main():
     top = [
         "README.md",
         "CHANGELOG.md",
+        "CITATION.bib",
         "pyproject.toml",
         "MANIFEST.in",
         "install.py",

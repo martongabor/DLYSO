@@ -1,12 +1,20 @@
 # DLYSO
 
-Software for young stellar object classification, accompanying the **NGYSO I** paper.
+DLYSO (deep learning young stellar object identification) is the companion software to **NGYSO I**, *The NEMESIS general YSO catalogue. I. Supervised classification with deep learning methods* by Marton et al. (2026), accepted for publication in *Astronomy & Astrophysics*.
 
-DLYSO downloads photometry, AllWISE images and ZTF light curves for a catalogue of sky coordinates. It creates input images, runs the classifiers and saves per-source model scores. The GUI provides project settings, an activity log and a results table.
+Developed within the NEMESIS project, DLYSO applies image-based deep learning to the identification of young stellar objects. It retrieves archival photometry, AllWISE infrared images and ZTF light curves, constructs four complementary input representations, and evaluates them with standard and custom convolutional neural networks. The desktop and command-line interfaces bring this workflow to user-supplied source catalogues, preserving individual model scores, per-channel votes and data-coverage information.
+
+See [scientific context and citation](docs/PAPER.md) for the connection to the paper, its evaluation results and a BibTeX reference.
 
 ![DLYSO project settings](docs/images/project.png)
 
-**Release candidate: 1.1.0rc1.** The software includes regression tests and installation checks. Scientific performance is not established by those checks; see the [model card](docs/MODEL_CARD.md). Author, license and model redistribution metadata must be finalized before public distribution.
+**Release candidate: 1.1.0rc1.** The software includes regression tests and installation checks. Scientific evaluation is reported in NGYSO I; the software checks do not independently reproduce it. See the [model card](docs/MODEL_CARD.md). Software license and model redistribution terms remain to be finalized.
+
+## Citation
+
+Marton, G., Madarász, M., Roquette, J., Audard, M., Gezer, I., Hernandez, D., & Dionatos, O. (2026). **The NEMESIS general YSO catalogue. I. Supervised classification with deep learning methods.** *Astronomy & Astrophysics*, accepted for publication.
+
+Please cite the paper and record the DLYSO version or commit used. [BibTeX](CITATION.bib) · [Scientific context](docs/PAPER.md)
 
 ## Installation
 

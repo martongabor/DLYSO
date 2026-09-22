@@ -4,7 +4,7 @@
 
 DLYSO runs image classifiers for four types of YSO data and saves each model score. Intended users are researchers who can inspect data quality, validate results against labelled data and document sample selection.
 
-This release contains inference artifacts. It does not contain a documented training pipeline or a benchmark establishing performance on an independent sample. Software smoke tests demonstrate that weights load and numerical predictions can be produced; they do not measure accuracy, completeness, contamination or calibration.
+The scientific method and evaluation are described in Marton et al. (2026), NGYSO I, accepted for publication in Astronomy & Astrophysics; see [Scientific context and citation](PAPER.md). The paper documents training samples, source-level train/validation/test separation, training procedures, validation-selected thresholds and test-set performance. This software release contains inference artifacts, not the full training and evaluation workflow. Software smoke tests demonstrate that weights load and numerical predictions can be produced; they do not independently reproduce the paper's accuracy, completeness or false-positive-rate measurements.
 
 ## Supplied models
 
@@ -21,21 +21,15 @@ SEDs use fixed catalogue exclusions, survey-provenance rules, frequency deduplic
 
 Dust-aware images encode a CSFD dust value in the image background. This is a contextual feature and can introduce dependence on sky position and environment. AllWISE inputs are archive colour renderings, not calibrated pixel-level flux measurements. DTDM images encode pairwise time and magnitude differences after fixed quality cuts. Their appearance depends on cadence, sample size and band availability.
 
-These representations should be kept consistent with model training. The release preserves the supplied preprocessing rules; it does not assert that the undocumented training preprocessing has been independently reconstructed and verified.
+These representations should be kept consistent with model training. The release preserves the supplied preprocessing rules and checkpoint configurations. Their equivalence to every training-time transformation described in NGYSO I has not been independently audited.
 
-## Evidence not supplied
+## Published-method context and release reproducibility
 
-The following information must be supplied by the model authors before making quantitative scientific performance claims:
+NGYSO I describes the KYSO and NEMESIS Orion YSO samples, the non-YSO comparison samples, source-level data splitting, network training and validation-based threshold selection. Its ordinary-SED ensemble reports 96.36% YSO recovery and a 0.43% non-YSO false-positive rate on the paper's test set. Those results should be cited as findings of the paper, not as fresh measurements from this repository's software checks.
 
-- Training and validation catalogue names, versions, labels and source selection.
-- Split construction, including source, region and survey overlap controls.
-- Training objectives, hyperparameters, random seeds and checkpoint selection.
-- Threshold-selection data and criteria.
-- Independent test-set results, confusion matrices and precision–recall curves.
-- Score calibration and performance stratified by sky region, extinction, brightness, missing bands and crowding.
-- Rights and licenses covering redistribution of each checkpoint and its training data.
+Reproducing that evaluation from this release alone still requires the exact catalogue snapshots and split membership, the complete training/evaluation code and run configurations, and a mapping from the released checkpoint hashes to the evaluated models. Generalisation to new sky regions or survey selections and probability calibration require separate assessment. Model ownership and redistribution terms also remain to be documented.
 
-No values are substituted for missing evidence. The fixed thresholds are disclosed in the output reference, but their presence is not evidence of calibration.
+The fixed thresholds are disclosed in the output reference; their presence is not evidence of probability calibration.
 
 ## Suggested validation protocol
 
@@ -45,4 +39,4 @@ Report uncertainty on performance estimates and compare against suitable catalog
 
 ## Limitations
 
-A high score can reflect correlations in the training sample rather than youth. Missing or blended photometry, survey rendering differences, extinction, cadence and training-set overlap may change behavior. Agreement among architectures does not guarantee independent evidence. The software should not be described as scientifically validated until the missing evaluation record is completed.
+A high score can reflect correlations in the training sample rather than youth. Missing or blended photometry, survey rendering differences, extinction, cadence and training-set overlap may change behavior. Agreement among architectures does not guarantee independent evidence. Scientific performance claims should identify the NGYSO I evaluation sample and selection rule; the released inference workflow has not independently reproduced the complete paper analysis.

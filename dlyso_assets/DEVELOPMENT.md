@@ -31,7 +31,7 @@ python -m dlyso_doctor --verify-models
 python tools/check_models.py
 # Optional small live end-to-end check (network access required):
 python tools/smoke_pipeline.py examples/coordinates.csv --output /tmp/dlyso-smoke
-QT_QPA_PLATFORM=offscreen python tools/capture_desktop.py
+QT_QPA_PLATFORM=offscreen python tools/capture_desktop.py --project /path/to/completed-public-ztf-project
 python tools/render_docs.py
 python -m build
 python tools/build_release.py
@@ -39,7 +39,7 @@ python tools/build_release.py
 
 `check_models.py` is an explicit CPU smoke check of all supplied models with synthetic inputs. It does not report accuracy. It needs the model files and PyTorch. The ordinary tests use no network and do not require downloaded survey data. Tests of a representative ensemble parser import PyTorch/torchvision but do not load checkpoint weights.
 
-The desktop screenshots use the shipped example for setup and synthetic, clearly labelled fixture data for results. They are generated from the actual widgets; no screenshot is a mock interface. Regenerate them after visual changes and inspect the images at normal and minimum window sizes.
+The desktop screenshots use the current shipped catalogue for setup and a completed ZTF workflow on those same 11 public sources for results and activity. Scores, DTDM images and saved task states come from the actual run; no synthetic result rows or invented activity states are used. The capture tool requires an explicit completed public example project. Regenerate them after visual changes and inspect the images at normal and minimum window sizes.
 
 The documentation renderer compiles the Markdown guides into one standalone HTML reference and synchronizes the installable resources. It embeds screenshot bytes, so the HTML has no external assets or required JavaScript. Markdown files remain the editing source of truth.
 

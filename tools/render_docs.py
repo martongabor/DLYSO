@@ -76,7 +76,7 @@ def main():
     screenshots = ""
     for name, caption in [
         ("project", "Project settings."),
-        ("results", "Results browser with synthetic demonstration data."),
+        ("results", "Results from the 11 public ZTF example sources; actual DTDM model predictions."),
     ]:
         path = ROOT / "docs/images" / f"{name}.png"
         if path.exists():

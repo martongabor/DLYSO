@@ -313,7 +313,7 @@ class DlysoApp(QMainWindow):
         side.setContentsMargins(22, 33, 22, 25)
         side.setSpacing(8)
         side.addWidget(label("DLYSO", "brand"))
-        side.addWidget(label("YOUNG STELLAR OBJECTS", "sideMuted"))
+        side.addWidget(label("deep learning young stellar object identification", "sideMuted", True))
         side.addSpacing(48)
         self.nav = []
         for i, title in enumerate(("Project", "Activity", "Results", "Documentation")):

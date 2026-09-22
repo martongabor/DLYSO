@@ -1,6 +1,6 @@
 include README.md CHANGELOG.md requirements.txt requirements-dev.txt constraints-tested.txt
 include dlyso_pipeline_docs.html
-recursive-include docs *.md *.png
+recursive-include docs *.md *.png *.csv *.json
 recursive-include examples *.csv
 recursive-include tools *.py
 recursive-include tests *.py

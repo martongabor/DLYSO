@@ -1,0 +1,25 @@
+{
+  "date": "2026-09-22",
+  "catalogue": "examples/coordinates.csv",
+  "catalogue_sha256": "43ae716ff11da0c84ae6f4d9c10bd5e219afa5dd29034e252bb41cf5610b90f9",
+  "results": "docs/screenshot-results.csv",
+  "results_sha256": "ec35363feb257ad1cef30713d25f0bacd9b7360293e6fdaa5bb7fff087f900a9",
+  "channel": "DTDM",
+  "device": "cpu",
+  "sources": 11,
+  "models_per_source": 12,
+  "archive_verification": "examples/ztf_verification.csv",
+  "run_state": {
+    "status": "complete",
+    "started_at": "2026-09-22T09:07:23.732932+00:00",
+    "steps": {
+      "Validate input": "complete",
+      "Download ZTF light curves": "complete",
+      "Create DTDM images": "complete",
+      "Classify DTDM \u00b7 custom": "complete",
+      "Classify DTDM \u00b7 ensemble": "complete",
+      "Combine results": "complete"
+    },
+    "finished_at": "2026-09-22T09:08:59.340215+00:00"
+  }
+}

@@ -59,8 +59,8 @@ Each eligible source has up to **12 model scores per channel**: ten torchvision 
 
 ```csv
 source_id,ra,dec
-candidate-001,277.448097,-10.562957
-candidate-002,83.822083,-5.391111
+BP Tau,64.81597493,29.10747971
+CI Tau,68.46672665,22.8416928
 ```
 
 Coordinates are ICRS decimal degrees. Invalid rows are recorded in `rejected_rows.csv`; valid input columns are retained. The final `result.csv` includes each model score, a vote count, the number of models evaluated and a coverage status. **No data means `not_evaluated` and blank votes, never zero votes.**

@@ -2,6 +2,8 @@
 
 ## 1.1.0rc1 — release candidate
 
+- Update the sidebar subtitle and replace synthetic documentation screenshots with current widgets and real public ZTF classification results.
+
 - Keep GUI text, inputs, selections and documentation readable under macOS Dark Mode with an explicit application palette.
 
 - Replace the placeholder examples with 11 named sources with downloaded public ZTF light curves and verified DTDM rendering; record per-band counts and archive IDs.

@@ -38,7 +38,7 @@ Local release-candidate checks performed on 14–21 September 2026. This records
 
 The first sandboxed live request was blocked by network restrictions; it succeeded when explicitly allowed outside the sandbox. The first end-to-end inference attempt was blocked by PyTorch shared-memory process restrictions; the same one-source CPU workflow succeeded outside that sandbox. These were environment restrictions, not silently suppressed successful checks.
 
-Screenshots under `docs/images/` use the demonstration input and synthetic result rows labelled as such. No private catalogue is included in release documentation or archives.
+Screenshots under `docs/images/` show the current 11-source public example catalogue and its actual completed CPU ZTF/DTDM classification run (2026-09-22). All 12 DTDM classifiers were run on the downloaded public light curves. Project, results, activity and minimum-size images were regenerated from current Qt widgets. `docs/screenshot-provenance.json` records the inputs and result checksum. No private catalogue is included in release documentation or archives.
 
 ## Limits
 

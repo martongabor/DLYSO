@@ -37,7 +37,7 @@ Run `dlyso-setup` to download and verify all 48 model files and any missing CSFD
 
 In the app:
 
-1. Click **Use the example catalogue** (13 sources, including 11 with verified public ZTF light curves), or browse to your own CSV.
+1. Click **Use the example catalogue** (11 named sources with verified public ZTF light curves), or browse to your own CSV.
 2. Choose a project name and destination. Leave **Spectral energy distribution** selected for a first run.
 3. Click **Start project**. The Activity page shows actual stage states and saves a log.
 4. Open **Results** to inspect images, individual scores and missing-data coverage.

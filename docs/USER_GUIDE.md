@@ -1,5 +1,7 @@
 # DLYSO user guide
 
+DLYSO is the software accompanying the **NGYSO I** paper.
+
 DLYSO classifies candidate young stellar objects (YSOs) using survey photometry, images and light curves. It takes a catalogue of coordinates and saves individual model scores. Scores require scientific validation before use for source selection.
 
 ## Installation

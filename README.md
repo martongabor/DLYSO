@@ -1,6 +1,6 @@
 # DLYSO
 
-Software for young stellar object classification.
+Software for young stellar object classification, accompanying the **NGYSO I** paper.
 
 DLYSO downloads photometry, AllWISE images and ZTF light curves for a catalogue of sky coordinates. It creates input images, runs the classifiers and saves per-source model scores. The GUI provides project settings, an activity log and a results table.
 

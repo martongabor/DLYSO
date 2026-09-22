@@ -10,30 +10,50 @@ DLYSO downloads photometry, AllWISE images and ZTF light curves for a catalogue 
 
 ## Installation
 
-Install the version published in [martongabor/DLYSO](https://github.com/martongabor/DLYSO):
+### 1. Choose a Python environment
+
+Use Python 3.10 or newer and Git. A virtual environment keeps DLYSO's Python dependencies separate from other software. It is recommended, but it is not a second installation method. If you already have a suitable environment (for example, a dedicated conda environment), activate it and continue to step 2.
+
+To create a new environment, run this once in a folder where you want to keep it:
+
+```bash
+python -m venv .venv
+```
+
+Then activate it using the command for your shell:
+
+| Shell | Activation command |
+|---|---|
+| macOS / Linux (bash or zsh) | `source .venv/bin/activate` |
+| Windows PowerShell | `.venv\Scripts\Activate.ps1` |
+| Windows Command Prompt | `.venv\Scripts\activate.bat` |
+
+If your system provides `python3` instead of `python`, use `python3` for the environment-creation command. The commands below use `python` inside the activated environment.
+
+### 2. Install DLYSO and its data once
+
+For access to a private repository, sign in with GitHub CLI (`gh auth login`) and configure Git access (`gh auth setup-git`) first.
+
+Run these two commands in your chosen environment. No source-folder download or clone is needed:
 
 ```bash
 python -m pip install "dlyso-pipeline[gui] @ git+https://github.com/martongabor/DLYSO.git"
 dlyso-setup
+```
+
+The first command installs the application and Python dependencies. The second downloads and verifies all 48 models and any missing CSFD dust maps, placing them where DLYSO finds them automatically. No manual ZIP extraction is needed. Use `dlyso-setup --skip-dust` if you do not need the dust-aware SED channel.
+
+### 3. Start the GUI
+
+```bash
 dlyso-gui
 ```
 
-Models and CSFD maps are downloaded automatically by `dlyso-setup`; see the [GitHub installation guide](docs/GITHUB_INSTALL.md). The source installation instructions follow.
+In a new terminal, activate the same environment before starting DLYSO. You do not need to recreate the environment or reinstall the application each time. If you already installed DLYSO successfully in an existing environment, keep using that environment; these instructions do not require a second installation.
 
-Use Python 3.10 or newer in a virtual environment. Python 3.11 is a practical default; the local release checks record their exact interpreter and dependency versions.
+For Linux system libraries, installation checks, file locations and the alternative source-checkout route, see the [installation guide](docs/GITHUB_INSTALL.md).
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -e ".[gui]"
-dlyso-setup
-python -m dlyso_doctor --verify-models
-python dlyso_ui.py
-```
-
-On Windows, activate with `.venv\Scripts\activate`. On Linux, a working desktop/display session is required for the GUI; the CLI works without one.
-
-Run `dlyso-setup` to download and verify all 48 model files and any missing CSFD maps. No manual ZIP extraction or model-path setting is needed. From a source checkout, `python install.py` installs the Python package and data in one step. [Installation details](docs/GITHUB_INSTALL.md)
+## First project
 
 In the app:
 

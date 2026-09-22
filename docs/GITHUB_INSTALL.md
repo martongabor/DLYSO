@@ -1,42 +1,82 @@
 # GitHub installation
 
-## Install the application
+### 1. Choose a Python environment
 
-Install Python 3.10 or newer and Git. For this private repository, first sign in with GitHub CLI (`gh auth login`) and configure Git access (`gh auth setup-git`).
+Use Python 3.10 or newer and Git. A virtual environment keeps DLYSO's Python dependencies separate from other software. It is recommended, but it is not a second installation method. If you already have a suitable environment (for example, a dedicated conda environment), activate it and continue to step 2.
 
-On Ubuntu/Debian, install the Qt system libraries before starting the GUI:
+To create a new environment, run this once in a folder where you want to keep it:
+
+```bash
+python -m venv .venv
+```
+
+Then activate it using the command for your shell:
+
+| Shell | Activation command |
+|---|---|
+| macOS / Linux (bash or zsh) | `source .venv/bin/activate` |
+| Windows PowerShell | `.venv\Scripts\Activate.ps1` |
+| Windows Command Prompt | `.venv\Scripts\activate.bat` |
+
+If your system provides `python3` instead of `python`, use `python3` for the environment-creation command. The commands below use `python` inside the activated environment.
+
+### 2. Install DLYSO and its data once
+
+For access to a private repository, sign in with GitHub CLI (`gh auth login`) and configure Git access (`gh auth setup-git`) first.
+
+Run these two commands in your chosen environment. No source-folder download or clone is needed:
+
+```bash
+python -m pip install "dlyso-pipeline[gui] @ git+https://github.com/martongabor/DLYSO.git"
+dlyso-setup
+```
+
+The first command installs the application and Python dependencies. The second downloads and verifies all 48 models and any missing CSFD dust maps, placing them where DLYSO finds them automatically. No manual ZIP extraction is needed. Use `dlyso-setup --skip-dust` if you do not need the dust-aware SED channel.
+
+### 3. Start the GUI
+
+```bash
+dlyso-gui
+```
+
+In a new terminal, activate the same environment before starting DLYSO. You do not need to recreate the environment or reinstall the application each time. If you already installed DLYSO successfully in an existing environment, keep using that environment; these instructions do not require a second installation.
+
+## Linux requirements
+
+The GUI needs a graphical desktop session. On Ubuntu/Debian, install the Qt system libraries:
 
 ```bash
 sudo apt-get update
 sudo apt-get install -y libegl1 libopengl0
 ```
 
-Create and activate a virtual environment, then install the application and data:
+The CLI works without a graphical desktop.
+
+## Download size and installation check
+
+The models total about 1.4 GiB. Allow about 3 GiB of temporary space for downloading and unpacking them, plus space for CSFD maps and Python dependencies. Repeating `dlyso-setup` verifies and reuses installed files. If a download fails, run it again; partial archives are discarded.
 
 ```bash
-python -m pip install "dlyso-pipeline[gui] @ git+https://github.com/martongabor/DLYSO.git"
-dlyso-setup
-dlyso-gui
+dlyso-doctor --verify-models
 ```
 
-`dlyso-setup` downloads all 48 models from the matching GitHub Release, verifies their SHA-256 checksums and installs them automatically. It also checks for CSFD dust maps and downloads them from the official dustmaps data provider if missing. No manual ZIP download, extraction or model-path configuration is required.
+The doctor checks dependencies and model files, not scientific accuracy or GPU compatibility.
 
-The model download is about 1.4 GiB. Allow about 3 GiB of temporary space for downloading and unpacking it, plus space for CSFD maps and Python dependencies. Repeating setup verifies and reuses installed files. A failed download can be retried by running `dlyso-setup` again; partially downloaded archives are discarded.
+## Alternative: install from a source checkout
 
-Standard pip installation installs Python code and dependencies. The separate setup command installs the large data files. To perform both steps with one installer command from a clone:
+Use this route if you want a local copy of the source code. Choose this route **instead of step 2 above**, not in addition to it. First choose and activate your Python environment as described in step 1.
 
 ```bash
 git clone https://github.com/martongabor/DLYSO.git
 cd DLYSO
-python -m venv .venv
-source .venv/bin/activate
 python install.py
-dlyso-gui
 ```
 
-On Windows, activate with `.venv\Scripts\activate` instead. Run `python install.py --skip-dust` or `dlyso-setup --skip-dust` if you do not need the dust-aware SED channel.
+`python install.py` installs both the application and its data. Then launch with `dlyso-gui` as in step 3. The installer also accepts `--skip-dust`.
 
-For a fixed code version, append an existing tag or full commit hash after `.git`. See [pip's Git installation reference](https://pip.pypa.io/en/stable/topics/vcs-support/).
+For development, use `python -m pip install -e ".[dev]"` followed by `dlyso-setup` from the checkout. Editable installation is for working on the code, not a required step for GUI users.
+
+For a fixed code version, append an existing tag or full commit hash after `.git` in the pip command. See [pip's Git installation reference](https://pip.pypa.io/en/stable/topics/vcs-support/).
 
 ## Installed files
 

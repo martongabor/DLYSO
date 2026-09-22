@@ -4,49 +4,50 @@ DLYSO classifies candidate young stellar objects (YSOs) using survey photometry,
 
 ## Installation
 
-To install directly from a repository, see [GitHub installation](GITHUB_INSTALL.md). The instructions below use a local source folder.
+### 1. Choose a Python environment
 
-### 1. Prepare Python
+Use Python 3.10 or newer and Git. A virtual environment keeps DLYSO's Python dependencies separate from other software. It is recommended, but it is not a second installation method. If you already have a suitable environment (for example, a dedicated conda environment), activate it and continue to step 2.
 
-Use Python 3.10 or newer and a virtual environment. Run these commands inside the DLYSO source folder:
+To create a new environment, run this once in a folder where you want to keep it:
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
-python -m pip install -e ".[gui]"
 ```
 
-Windows activation is `.venv\Scripts\activate`. For command-line use without the desktop toolkit, install with `python -m pip install -e .` instead. The CLI and desktop use the same interpreter and model files. The desktop is built with Qt for Python, not a browser server.
+Then activate it using the command for your shell:
 
-### 2. Install models and dust maps
+| Shell | Activation command |
+|---|---|
+| macOS / Linux (bash or zsh) | `source .venv/bin/activate` |
+| Windows PowerShell | `.venv\Scripts\Activate.ps1` |
+| Windows Command Prompt | `.venv\Scripts\activate.bat` |
 
-Run:
+If your system provides `python3` instead of `python`, use `python3` for the environment-creation command. The commands below use `python` inside the activated environment.
+
+### 2. Install DLYSO and its data once
+
+For access to a private repository, sign in with GitHub CLI (`gh auth login`) and configure Git access (`gh auth setup-git`) first.
+
+Run these two commands in your chosen environment. No source-folder download or clone is needed:
 
 ```bash
+python -m pip install "dlyso-pipeline[gui] @ git+https://github.com/martongabor/DLYSO.git"
 dlyso-setup
 ```
 
-This downloads the 48 model files from the matching GitHub Release, checks their SHA-256 hashes and puts them in DLYSO's user-data directory. The app locates them automatically. It also downloads missing CSFD maps through dustmaps. No manual ZIP extraction is needed.
+The first command installs the application and Python dependencies. The second downloads and verifies all 48 models and any missing CSFD dust maps, placing them where DLYSO finds them automatically. No manual ZIP extraction is needed. Use `dlyso-setup --skip-dust` if you do not need the dust-aware SED channel.
 
-For a source checkout, `python install.py` performs both the Python installation and data setup. See [GitHub installation](GITHUB_INSTALL.md) for private-repository access, storage locations and complete commands.
-
-### 3. Check the installation
+### 3. Start the GUI
 
 ```bash
-python -m dlyso_doctor --verify-models
+dlyso-gui
 ```
 
-The model download is about 1.4 GiB; allow additional space for unpacking, CSFD maps and Python dependencies. `dlyso-setup --skip-dust` omits dust maps if the dust-aware SED channel is not needed. Running setup again reuses verified models and existing maps.
+In a new terminal, activate the same environment before starting DLYSO. You do not need to recreate the environment or reinstall the application each time. If you already installed DLYSO successfully in an existing environment, keep using that environment; these instructions do not require a second installation.
 
-The doctor checks Python modules and model hashes without network access. It does not certify scientific accuracy or GPU compatibility. `DLYSO_MODEL_ROOT` remains supported for manually managed model installations.
+The same instructions are available in [GitHub installation](GITHUB_INSTALL.md), together with the alternative source-checkout route, Linux system libraries and storage locations. The models total about 1.4 GiB; allow about 3 GiB of temporary space plus space for dust maps and Python dependencies.
 
-### 4. Launch
-
-```bash
-python dlyso_ui.py
-```
-
-After installation the `dlyso-gui` command also launches the desktop. The application uses a consistent light palette, including when macOS Dark Mode is enabled. Linux requires a graphical desktop and Qt platform libraries. Remote servers can use the command line.
+To check dependencies and model files, run `dlyso-doctor --verify-models`. This does not certify scientific accuracy or GPU compatibility. The GUI uses a consistent light palette, including when macOS Dark Mode is enabled. Linux requires a graphical desktop and Qt platform libraries; remote servers can use the CLI.
 
 ## Create a project
 

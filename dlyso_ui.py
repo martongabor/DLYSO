@@ -12,7 +12,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from PySide6.QtCore import QAbstractTableModel, QModelIndex, QObject, Qt, QTimer, QUrl, Signal
-from PySide6.QtGui import QColor, QDesktopServices, QFont, QPainter, QPainterPath, QPen, QPixmap, QTextDocument
+from PySide6.QtGui import QColor, QDesktopServices, QFont, QPainter, QPainterPath, QPalette, QPen, QPixmap, QTextDocument
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -71,15 +71,16 @@ QLabel#error { background: #f9eae3; color: #90412e; border-radius: 6px; padding:
 QFrame#panel { background: #ffffff; border: 1px solid #dce2dc; border-radius: 9px; }
 QFrame#modality { background: #ffffff; border: 1px solid #dce2dc; border-radius: 8px; }
 QFrame#modality[selected="true"] { background: #f1f7f3; border: 1px solid #358773; }
-QLineEdit, QSpinBox, QComboBox { background: #ffffff; border: 1px solid #cad4ce; border-radius: 5px; padding: 9px; selection-background-color: #167868; }
+QLineEdit, QSpinBox, QComboBox { background: #ffffff; border: 1px solid #cad4ce; border-radius: 5px; padding: 9px; selection-background-color: #167868; selection-color: #ffffff; }
 QLineEdit:focus, QSpinBox:focus, QComboBox:focus { border: 1px solid #167868; }
-QLineEdit:disabled { color: #81918f; background: #f0f2ee; }
+QLineEdit:disabled, QSpinBox:disabled, QComboBox:disabled { color: #596b65; background: #f0f2ee; }
+QComboBox QAbstractItemView { color: #172d36; background: #ffffff; selection-background-color: #167868; selection-color: #ffffff; }
 QPushButton { background: #ffffff; border: 1px solid #ccd5ce; border-radius: 5px; padding: 9px 14px; font-weight: 500; }
 QPushButton:hover { background: #edf3ee; border-color: #97afa0; }
-QPushButton:disabled { color: #a1aca5; background: #eff1ed; border-color: #e1e6df; }
+QPushButton:disabled { color: #596b65; background: #eff1ed; border-color: #e1e6df; }
 QPushButton#primary { background: #167868; color: white; border: 1px solid #167868; padding: 12px 20px; }
 QPushButton#primary:hover { background: #105f52; }
-QPushButton#primary:disabled { background: #b9cec5; border-color: #b9cec5; color: white; }
+QPushButton#primary:disabled { background: #b9cec5; border-color: #b9cec5; color: #344e44; }
 QCheckBox { spacing: 9px; }
 QCheckBox::indicator { width: 17px; height: 17px; border: 1px solid #aebfb4; border-radius: 4px; background: white; }
 QCheckBox::indicator:checked { background: #167868; border: 3px solid #83b7a1; }
@@ -89,12 +90,36 @@ QPlainTextEdit { background: #1b3039; color: #d4e1d8; border: none; border-radiu
 QTableView { background: white; alternate-background-color: #f7f9f5; border: none; selection-background-color: #e0eee7; selection-color: #172d36; gridline-color: #edf0e9; }
 QHeaderView::section { background: #f1f4ef; color: #64766d; border: none; border-bottom: 1px solid #dce2dc; padding: 10px 7px; font-size: 11px; font-weight: 600; }
 QTableView::item { padding: 7px; border-bottom: 1px solid #edf0e9; }
-QScrollArea, QTextBrowser { border: none; background: transparent; }
+QScrollArea { border: none; background: transparent; }
+QTextBrowser { color: #172d36; background: #f4f5f1; border: none; selection-background-color: #167868; selection-color: #ffffff; }
+QTableCornerButton::section { background: #f1f4ef; border: none; }
 QScrollBar:vertical { background: transparent; width: 8px; margin: 0; }
 QScrollBar::handle:vertical { background: #bccbc0; border-radius: 4px; min-height: 25px; }
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }
 QToolTip { background: #172d36; color: white; border: none; padding: 6px; }
 """
+
+
+def gui_palette():
+    """Keep every Qt surface consistent with the light application stylesheet."""
+    palette = QPalette()
+    colors = {
+        "Window": "#f4f5f1", "WindowText": INK,
+        "Base": "#ffffff", "AlternateBase": "#f7f9f5", "Text": INK,
+        "Button": "#ffffff", "ButtonText": INK,
+        "Highlight": TEAL, "HighlightedText": "#ffffff",
+        "PlaceholderText": "#596b65", "Link": "#126c5d", "LinkVisited": "#694d82",
+        "ToolTipBase": INK, "ToolTipText": "#ffffff",
+        "Light": "#ffffff", "Midlight": "#e8ede6", "Mid": "#aebfb4",
+        "Dark": "#65777c", "Shadow": "#172d36", "BrightText": "#ffffff",
+    }
+    for group in (QPalette.ColorGroup.Active, QPalette.ColorGroup.Inactive, QPalette.ColorGroup.Disabled):
+        for role, color in colors.items():
+            palette.setColor(group, getattr(QPalette.ColorRole, role), QColor(color))
+    for role in (QPalette.ColorRole.Text, QPalette.ColorRole.WindowText, QPalette.ColorRole.ButtonText):
+        palette.setColor(QPalette.ColorGroup.Disabled, role, QColor("#596b65"))
+    palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Base, QColor("#f0f2ee"))
+    return palette
 
 
 def label(text, name=None, wrap=False):
@@ -261,6 +286,7 @@ class DlysoApp(QMainWindow):
         self.setWindowTitle("DLYSO")
         self.resize(1370, 920)
         self.setMinimumSize(1120, 760)
+        self.setPalette(gui_palette())
         self.setStyleSheet(STYLE)
         self.worker = None
         self.worker_thread = None
@@ -977,6 +1003,7 @@ def main():
     app.setApplicationName("DLYSO")
     app.setOrganizationName("DLYSO")
     app.setStyle("Fusion")
+    app.setPalette(gui_palette())
     window = DlysoApp()
     window.show()
     sys.exit(app.exec())

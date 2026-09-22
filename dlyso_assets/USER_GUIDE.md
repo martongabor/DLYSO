@@ -46,7 +46,7 @@ The doctor checks Python modules and model hashes without network access. It doe
 python dlyso_ui.py
 ```
 
-After installation the `dlyso-gui` command also launches the desktop. Linux requires a graphical desktop and Qt platform libraries. Remote servers can use the command line.
+After installation the `dlyso-gui` command also launches the desktop. The application uses a consistent light palette, including when macOS Dark Mode is enabled. Linux requires a graphical desktop and Qt platform libraries. Remote servers can use the command line.
 
 ## Create a project
 

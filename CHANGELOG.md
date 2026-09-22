@@ -2,6 +2,8 @@
 
 ## 1.1.0rc1 — release candidate
 
+- Keep GUI text, inputs, selections and documentation readable under macOS Dark Mode with an explicit application palette.
+
 - Expand the example catalogue to 13 sources, adding 11 with downloaded public ZTF light curves and verified DTDM rendering; record per-band counts and archive IDs.
 
 - Add automatic model and CSFD installation with checksum verification and user-data discovery.

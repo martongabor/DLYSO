@@ -2,6 +2,8 @@
 
 ## 1.1.0rc1 — release candidate
 
+- Expand the example catalogue to 13 sources, adding 11 with downloaded public ZTF light curves and verified DTDM rendering; record per-band counts and archive IDs.
+
 - Add automatic model and CSFD installation with checksum verification and user-data discovery.
 - Fix relative documentation links in the desktop and add Back navigation.
 

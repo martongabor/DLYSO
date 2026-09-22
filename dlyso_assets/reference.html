@@ -43,7 +43,7 @@ python -m pip install -e &quot;.[gui]&quot;
 <p>After installation the <code>dlyso-gui</code> command also launches the desktop. Linux requires a graphical desktop and Qt platform libraries. Remote servers can use the command line.</p>
 <h2 id="create-a-project">Create a project</h2>
 <ol>
-<li>In <strong>Project</strong>, choose <strong>Use the example catalogue</strong>. These two positions are demonstration inputs, not a labelled validation set.</li>
+<li>In <strong>Project</strong>, choose <strong>Use the example catalogue</strong>. The catalogue includes additional sources with verified public ZTF light curves; see <strong>Example catalogue</strong> below.</li>
 <li>Enter a short project name. Names start with a letter or digit and accept letters, digits, dots, underscores and hyphens, up to 80 characters.</li>
 <li>Choose the parent projects folder. DLYSO creates one subfolder for the project.</li>
 <li>Keep <strong>Spectral energy distribution</strong> selected. This first run needs network access and SED models, but no account or dust maps.</li>
@@ -52,6 +52,88 @@ python -m pip install -e &quot;.[gui]&quot;
 <li>Once a channel finishes, click <strong>View results</strong>. Review how many sources were evaluated before interpreting votes.</li>
 </ol>
 <p>The app starts with four download workers per branch and an inference batch of 16. A batch is the number of images sent to a model at once. If you run out of memory, reduce it; a batch of 1 is valid. Increasing workers increases concurrent requests, not necessarily throughput. Independent branches can each use the configured number of workers.</p>
+<h2 id="example-catalogue">Example catalogue</h2>
+<p>The bundled catalogue contains 13 positions: the original two demonstration inputs and 11 additional named sources with public ZTF light curves downloaded successfully on 2026-09-22. Choose <strong>Use the example catalogue</strong> and enable <strong>ZTF light curves</strong> to try them. Use a new project name for this expanded catalogue.</p>
+<p>Coordinates for the added sources come from the <a href="https://cds.unistra.fr/cgi-bin/Sesame">CDS Sesame/SIMBAD resolver</a>. Verification used DLYSO's downloader with its default 2-arcsecond search radius and dominant object ID per band, followed by DTDM rendering. The table counts points retained by the current DTDM cuts (<code>catflags == 0</code>, non-missing MJD and magnitude). Zero means no usable downloaded points in that band.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th style="text-align: right;">g points</th>
+<th style="text-align: right;">r points</th>
+<th style="text-align: right;">i points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BP Tau</td>
+<td style="text-align: right;">411</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>CI Tau</td>
+<td style="text-align: right;">396</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>DL Tau</td>
+<td style="text-align: right;">409</td>
+<td style="text-align: right;">358</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>DR Tau</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>DN Tau</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>DO Tau</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>GM Aur</td>
+<td style="text-align: right;">411</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>V409 Tau</td>
+<td style="text-align: right;">421</td>
+<td style="text-align: right;">803</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>V836 Tau</td>
+<td style="text-align: right;">380</td>
+<td style="text-align: right;">447</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>VY Tau</td>
+<td style="text-align: right;">420</td>
+<td style="text-align: right;">667</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr>
+<td>IQ Tau</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">130</td>
+<td style="text-align: right;">22</td>
+</tr>
+</tbody>
+</table>
+<p>All added sources produced nonempty DTDM images. These are workflow examples, not a labelled accuracy benchmark or independent validation sample. The original two rows have not been included in this ZTF check. Archive availability and counts can change; the <a href="https://irsa.ipac.caltech.edu/docs/program_interface/ztf_lightcurve_api.html">IRSA API</a> uses the latest public collection by default. Download URLs, object IDs and measurement counts are recorded in <code>examples/ztf_verification.csv</code> in the repository. Light curves are downloaded when the project runs, rather than bundled with the application.</p>
 <h2 id="prepare-your-catalogue">Prepare your catalogue</h2>
 <p>The input is a comma-separated text file with one header row. Coordinates must be <strong>ICRS decimal degrees</strong>, not sexagesimal strings, Galactic longitude/latitude or radians.</p>
 <table>

@@ -50,7 +50,7 @@ After installation the `dlyso-gui` command also launches the desktop. Linux requ
 
 ## Create a project
 
-1. In **Project**, choose **Use the example catalogue**. These two positions are demonstration inputs, not a labelled validation set.
+1. In **Project**, choose **Use the example catalogue**. The catalogue includes additional sources with verified public ZTF light curves; see **Example catalogue** below.
 2. Enter a short project name. Names start with a letter or digit and accept letters, digits, dots, underscores and hyphens, up to 80 characters.
 3. Choose the parent projects folder. DLYSO creates one subfolder for the project.
 4. Keep **Spectral energy distribution** selected. This first run needs network access and SED models, but no account or dust maps.
@@ -59,6 +59,28 @@ After installation the `dlyso-gui` command also launches the desktop. Linux requ
 7. Once a channel finishes, click **View results**. Review how many sources were evaluated before interpreting votes.
 
 The app starts with four download workers per branch and an inference batch of 16. A batch is the number of images sent to a model at once. If you run out of memory, reduce it; a batch of 1 is valid. Increasing workers increases concurrent requests, not necessarily throughput. Independent branches can each use the configured number of workers.
+
+## Example catalogue
+
+The bundled catalogue contains 13 positions: the original two demonstration inputs and 11 additional named sources with public ZTF light curves downloaded successfully on 2026-09-22. Choose **Use the example catalogue** and enable **ZTF light curves** to try them. Use a new project name for this expanded catalogue.
+
+Coordinates for the added sources come from the [CDS Sesame/SIMBAD resolver](https://cds.unistra.fr/cgi-bin/Sesame). Verification used DLYSO's downloader with its default 2-arcsecond search radius and dominant object ID per band, followed by DTDM rendering. The table counts points retained by the current DTDM cuts (`catflags == 0`, non-missing MJD and magnitude). Zero means no usable downloaded points in that band.
+
+| Source | g points | r points | i points |
+|---|---:|---:|---:|
+| BP Tau | 411 | 0 | 0 |
+| CI Tau | 396 | 0 | 0 |
+| DL Tau | 409 | 358 | 0 |
+| DR Tau | 30 | 0 | 0 |
+| DN Tau | 71 | 0 | 0 |
+| DO Tau | 75 | 93 | 0 |
+| GM Aur | 411 | 0 | 0 |
+| V409 Tau | 421 | 803 | 0 |
+| V836 Tau | 380 | 447 | 0 |
+| VY Tau | 420 | 667 | 14 |
+| IQ Tau | 72 | 130 | 22 |
+
+All added sources produced nonempty DTDM images. These are workflow examples, not a labelled accuracy benchmark or independent validation sample. The original two rows have not been included in this ZTF check. Archive availability and counts can change; the [IRSA API](https://irsa.ipac.caltech.edu/docs/program_interface/ztf_lightcurve_api.html) uses the latest public collection by default. Download URLs, object IDs and measurement counts are recorded in `examples/ztf_verification.csv` in the repository. Light curves are downloaded when the project runs, rather than bundled with the application.
 
 ## Prepare your catalogue
 

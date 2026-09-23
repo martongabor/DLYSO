@@ -110,6 +110,8 @@ Rows with invalid or missing coordinates go to `rejected_rows.csv`, with the inp
 
 **ZTF light curves.** Retrieves ZTF light curves and produces an RGB time-difference/magnitude-difference (DTDM) image. Each band needs at least five quality-selected measurements. The current acquisition rule skips declinations at or below −30°. DLYSO downloads the API's default public collection anonymously. Proprietary collections are outside its scope. See the [IRSA API reference](https://irsa.ipac.caltech.edu/docs/program_interface/ztf_lightcurve_api.html).
 
+The standard CNN ensemble uses mixed-precision inference on CUDA and MPS, then converts logits to float32 before softmax, averaging and CSV export. This preserves acceleration while avoiding unsupported bfloat16-to-NumPy conversion. CPU inference uses float32.
+
 The two SED channels share one download step, then render independently. Each representation unlocks its own custom and ensemble classifiers immediately: SED classification does not wait for dust-aware SED plots, AllWISE or ZTF. Ready classifier jobs share a single inference slot to limit GPU memory use; downloads and plotting continue alongside inference. The result table and Results page refresh after each channel finishes. Pending or failed channels remain `not_evaluated`, and predictions from an earlier attempt are excluded until that channel finishes successfully in the current run. This scheduling also applies to CLI `all` and `sed_classify`.
 
 ## Read the Activity page

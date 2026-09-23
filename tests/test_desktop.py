@@ -148,7 +148,8 @@ def test_documentation_relative_links_and_back_navigation(window):
     assert guide.source().isLocalFile()
     assert "Create a project" in guide.toPlainText()
     guide.setSource(QUrl("GITHUB_INSTALL.md"))
-    assert "Install the application" in guide.toPlainText()
+    assert "GitHub installation" in guide.toPlainText()
+    assert "dlyso-setup" in guide.toPlainText()
     assert guide.source().fileName() == "GITHUB_INSTALL.md"
     guide.backward()
     assert "Create a project" in guide.toPlainText()

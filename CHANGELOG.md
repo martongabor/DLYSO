@@ -2,6 +2,8 @@
 
 ## 1.1.0rc1 — release candidate
 
+- Convert ensemble logits to float32 before softmax, keeping AMP acceleration while fixing bfloat16-to-NumPy export on supported CUDA GPUs.
+
 - Update the sidebar subtitle and replace synthetic documentation screenshots with current widgets and real public ZTF classification results.
 
 - Keep GUI text, inputs, selections and documentation readable under macOS Dark Mode with an explicit application palette.

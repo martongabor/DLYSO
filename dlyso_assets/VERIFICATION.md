@@ -1,6 +1,6 @@
 # Verification record
 
-Local release-candidate checks performed on 14–21 September 2026. This records software behavior, not a scientific benchmark.
+Local release-candidate checks performed on 14–23 September 2026. This records software behavior, not a scientific benchmark.
 
 ## Environment
 
@@ -17,7 +17,8 @@ Local release-candidate checks performed on 14–21 September 2026. This records
 
 | Check | Outcome |
 |---|---|
-| Offline regression and desktop interaction suite | 48 tests passed. |
+| Offline regression and desktop interaction suite | 51 tests passed. |
+| Mixed-precision output export | CPU regression tests feed bfloat16, float16 and float32 logits through the actual ensemble inference and CSV-export path, verifying per-model probabilities and their mean. This checks dtype handling, not physical CUDA or MPS execution. |
 | AllWISE rejection regression | Verified a cached 186-source stage completes with 183 reused images and three nonfatal quality rejections; network failures remain fatal and retryable. |
 | Independent scheduling | Offline subprocess tests verify inference before an unrelated download finishes, failure isolation, serialized inference, partial result publication, exclusion of stale predictions, GUI refresh and CLI parameter forwarding. No new live four-channel or GPU certification is claimed. |
 | Ruff lint | Passed for the DLYSO release scope. Unrelated astronomy scripts are excluded. |

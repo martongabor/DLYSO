@@ -232,3 +232,41 @@ def test_public_http_requests_ignore_saved_login_state(monkeypatch):
     monkeypatch.setattr(requests.sessions, "get_netrc_auth", unexpected_login)
     monkeypatch.setattr(requests.Session, "send", respond)
     assert fetch_bytes("https://irsa.ipac.caltech.edu/example") == b"public data"
+
+
+@pytest.mark.parametrize("output_dtype", ["bfloat16", "float16", "float32"])
+def test_ensemble_exports_low_precision_logits(tmp_path, monkeypatch, output_dtype):
+    """Exercise the real softmax, model averaging and CSV export without a GPU."""
+    import torch
+    from PIL import Image
+
+    spec = importlib.util.spec_from_file_location("ensemble", ROOT / "scripts/class.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    images = tmp_path / "DTDM"
+    images.mkdir()
+    Image.new("RGB", (16, 16)).save(images / "64.815975_29.107480.png")
+    checkpoints = tmp_path / "models"
+    checkpoints.mkdir()
+    for arch in ("first", "second"):
+        (checkpoints / f"DTDM_{arch}_best.pt").touch()
+
+    class FixedLogits(torch.nn.Module):
+        def __init__(self, values):
+            super().__init__()
+            self.values = values
+
+        def forward(self, batch):
+            return torch.tensor(self.values, dtype=getattr(torch, output_dtype)).expand(len(batch), -1)
+
+    def load(path, device, channels_last):
+        first = "first" in path.name
+        return FixedLogits([0, 2] if first else [2, 0]), "first" if first else "second", ["other", "YSO"], 16, 1
+
+    monkeypatch.setattr(module, "load_checkpoint_as_model", load)
+    module.infer_type("DTDM", tmp_path, checkpoints, tmp_path / "out", torch.device("cpu"), 1, 0, False)
+    row = pd.read_csv(tmp_path / "out/class_DTDM.csv").iloc[0]
+    expected = torch.softmax(torch.tensor([0., 2.]), dim=0)[1].item()
+    assert row.p_yso_first == pytest.approx(expected, abs=1e-7)
+    assert row.p_yso_second == pytest.approx(1 - expected, abs=1e-7)
+    assert row.avg_p_yso == pytest.approx(0.5, abs=1e-7)

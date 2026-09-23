@@ -295,7 +295,9 @@ def infer_type(
             yidx = int(entry["yso_idx"])
             with torch.autocast(device_type=device.type, dtype=amp_dtype, enabled=use_amp):
                 logits = m(batch)
-            probs = sm(logits)
+            # AMP outputs can be bfloat16, which cannot be exported directly to NumPy.
+            # Compute probabilities and ensemble averages in float32 on every device.
+            probs = sm(logits.float())
             yidx = max(0, min(yidx, probs.shape[1] - 1))
             per_model_probs.append(probs[:, yidx])
             arch_names.append(str(entry["arch"]))

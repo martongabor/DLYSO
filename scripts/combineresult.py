@@ -64,7 +64,7 @@ THRESHOLDS: Dict[str, Dict[str, float]] = {
         "resnet50": 0.801,
         "resnext50_32x4d": 0.617,
         "shufflenet_v2_x0_5": 0.757,
-        "squeezenet1_1": 0.757,
+        "squeezenet1_1": 0.577,
         "custom_resnet": 0.65,
         "custom_rca": 0.71,
     },
@@ -79,8 +79,8 @@ THRESHOLDS: Dict[str, Dict[str, float]] = {
         "resnext50_32x4d": 0.470,
         "shufflenet_v2_x0_5": 0.596,
         "squeezenet1_1": 0.365,
-        "custom_resnet": 0.58,
-        "custom_rca": 0.5,
+        "custom_resnet": 0.5,
+        "custom_rca": 0.58,
     },
     "DTDM": {
         "efficientnet_b0": 0.585,
@@ -187,6 +187,15 @@ def load_custom(path: Path, modality: str, custom_model: str, ndp: int) -> pd.Da
     )
 
 
+def classification_labels(votes: pd.Series, counts: pd.Series) -> pd.Series:
+    """Six-of-twelve display/export rule; incomplete evaluations stay unlabeled."""
+    result = pd.Series(pd.NA, index=votes.index, dtype="string")
+    complete = counts.eq(12) & votes.notna()
+    result.loc[complete & votes.ge(6)] = "YSO"
+    result.loc[complete & votes.lt(6)] = "non-YSO"
+    return result
+
+
 def count_votes(row: pd.Series, modality: str):
     th = THRESHOLDS[modality]
     votes = 0
@@ -255,6 +264,10 @@ def main():
         )
 
         master[f"{modality}_votes"] = master.apply(lambda r: count_votes(r, modality), axis=1).astype("Int64")
+
+        master[f"{modality}_classification"] = classification_labels(
+            master[f"{modality}_votes"], master[f"{modality}_n_models"]
+        )
 
     master.drop(columns=["_ra_key", "_dec_key"], inplace=True, errors="ignore")
     Path(args.outcsv).parent.mkdir(parents=True, exist_ok=True)

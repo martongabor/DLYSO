@@ -55,7 +55,7 @@ To check dependencies and model files, run `dlyso-doctor --verify-models`. This 
 
 ## Create a project
 
-1. In **Project**, choose **Use the example catalogue**. The catalogue contains named sources with verified public ZTF light curves; see **Example catalogue** below.
+1. In **Project**, choose **Use the example catalogue**. The catalogue contains 11 YSOs and 9 non-YSO comparison objects; see **Example catalogue** below.
 2. Enter a short project name. Names start with a letter or digit and accept letters, digits, dots, underscores and hyphens, up to 80 characters.
 3. Choose the parent projects folder. DLYSO creates one subfolder for the project.
 4. Keep **Spectral energy distribution** selected. This first run needs network access and SED models, but no account or dust maps.
@@ -67,7 +67,11 @@ The app starts with four download workers per branch and an inference batch of 1
 
 ## Example catalogue
 
-The bundled catalogue contains 11 named sources with public ZTF light curves downloaded successfully on 2026-09-22. Choose **Use the example catalogue** and enable **ZTF light curves** to try them. Use a new project name for this expanded catalogue.
+The bundled catalogue contains **20 named sources: 11 YSOs and 9 non-YSO comparison objects**. Choose **Use the example catalogue** and enable **Spectral energy distribution** to compare their model results. Use a new project name for this expanded catalogue.
+
+The non-YSO examples are 3C 273, 3C 279, Mrk 421, Mrk 501, BL Lac, OJ 287, 3C 66A, PKS 1510-089 and W Comae. Their SIMBAD object types are quasars or BL Lac objects, checked on 2026-09-24. `examples/non_yso_references.csv` records the coordinate/type references. The input `reference_class` column describes their known broad source type; it is independent of the model-generated `<channel>_classification` labels. Models can disagree with it. In the checked SED run on 2026-09-24, all 20 sources had 12 predictions: all 11 reference YSOs received a YSO label, and seven of the nine non-YSOs received a non-YSO label. 3C 273 (9 votes) and W Comae (7 votes) were false positives under the default six-vote rule. They are retained as examples of the method's limitations, not relabelled as known YSOs. This small demonstration is not an accuracy benchmark.
+
+The original 11 YSO examples have public ZTF light curves downloaded successfully on 2026-09-22. ZTF availability and service responses are separate from the known source type. The additional checks and their outcomes are recorded in `examples/ztf_status.csv`; only successful downloads are listed in `examples/ztf_verification.csv`. On 2026-09-24, 3C 279 downloaded successfully; the other eight new non-YSO queries timed out after retries. A timeout does not establish that the source lacks ZTF observations.
 
 Coordinates for the added sources come from the [CDS Sesame/SIMBAD resolver](https://cds.unistra.fr/cgi-bin/Sesame). Verification used DLYSO's downloader with its default 2-arcsecond search radius and dominant object ID per band, followed by DTDM rendering. The table counts points retained by the current DTDM cuts (`catflags == 0`, non-missing MJD and magnitude). Zero means no usable downloaded points in that band.
 
@@ -84,8 +88,11 @@ Coordinates for the added sources come from the [CDS Sesame/SIMBAD resolver](htt
 | V836 Tau | 380 | 447 | 0 |
 | VY Tau | 420 | 667 | 14 |
 | IQ Tau | 72 | 130 | 22 |
+| 3C 279 (non-YSO; checked 2026-09-24) | 0 | 0 | 88 |
 
-All example sources produced nonempty DTDM images. These are workflow examples, not a labelled accuracy benchmark or independent validation sample. Archive availability and counts can change; the [IRSA API](https://irsa.ipac.caltech.edu/docs/program_interface/ztf_lightcurve_api.html) uses the latest public collection by default. Download URLs, object IDs and measurement counts are recorded in `examples/ztf_verification.csv` in the repository. Light curves are downloaded when the project runs, rather than bundled with the application.
+All 11 original YSO examples produced nonempty DTDM images. These are workflow examples, not a labelled accuracy benchmark or independent validation sample. Archive availability and counts can change; the [IRSA API](https://irsa.ipac.caltech.edu/docs/program_interface/ztf_lightcurve_api.html) uses the latest public collection by default. Download URLs, object IDs and measurement counts are recorded in `examples/ztf_verification.csv` in the repository. Light curves are downloaded when the project runs, rather than bundled with the application.
+
+The Project page previews the first three rows and counts the entire CSV in the background. It reports valid, total and invalid row counts using the same coordinate checks as the pipeline. Invalid rows are excluded when the run starts and recorded in `rejected_rows.csv`.
 
 ## Prepare your catalogue
 
@@ -138,6 +145,7 @@ Open an existing project or view results as each channel finishes. Select a chan
 
 - **Source** uses `source_id` when available, with common name/ID alternatives and a generated label as a fallback.
 - **Votes** counts individual models whose score meets their own fixed threshold. A blank value means no model evaluated the source.
+- **Classification** uses the selected channel: at least 6 of 12 votes gives `YSO`; fewer gives `non-YSO`. It stays blank if any model is missing. CSV exports include `<channel>_classification` for each evaluated channel. This default selection label is not a confirmed physical classification.
 - **Models** is the number of available predictions, from 0 to 12.
 - **Coverage** is Complete (12), Partial (1–11) or Not evaluated (0).
 

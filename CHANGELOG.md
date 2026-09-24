@@ -2,6 +2,14 @@
 
 ## 1.1.0rc1 — release candidate
 
+- Expand the example catalogue to 11 YSOs and 9 named, SIMBAD-verified non-YSO comparison objects, with reference labels separate from predictions.
+- Show setup downloads on one terminal line, and report complete CSV validation counts in Project.
+- Add per-channel Classification labels to Results and CSV exports using six of twelve votes; incomplete evaluations remain unlabeled.
+
+- Correct the SEDr SqueezeNet vote threshold from 0.757 to the author-confirmed 0.577. Recombine saved predictions to update SEDr vote totals; inference scores are unchanged.
+
+- Correct AllWISE custom model vote thresholds to SmallResNet 0.500 and RCA 0.580, as confirmed by the authors and manuscript. Recombine existing predictions to update votes; model scores are unchanged.
+
 - Convert ensemble logits to float32 before softmax, keeping AMP acceleration while fixing bfloat16-to-NumPy export on supported CUDA GPUs.
 
 - Update the sidebar subtitle and replace synthetic documentation screenshots with current widgets and real public ZTF classification results.

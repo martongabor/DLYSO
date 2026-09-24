@@ -154,3 +154,32 @@ def test_documentation_relative_links_and_back_navigation(window):
     guide.backward()
     assert "Create a project" in guide.toPlainText()
     assert guide.source().toLocalFile().endswith("/dlyso_assets/USER_GUIDE.md")
+
+
+def test_preview_counts_all_rows_and_invalid_coordinates(window, tmp_path, application):
+    import time
+    source = tmp_path / 'many.csv'
+    source.write_text('name,RA_ICRS,DE_ICRS\na,1,2\nb,3,4\nc,5,6\nd,7,8\nbad,360,0\nnan,NaN,0\n')
+    window.input_edit.setText(str(source))
+    window.input_timer.stop()
+    window._preview_input()
+    deadline = time.monotonic() + 5
+    while 'valid rows /' not in window.input_note.text() and time.monotonic() < deadline:
+        application.processEvents()
+        time.sleep(0.01)
+    assert '4 valid rows / 6 total' in window.input_note.text()
+    assert '2 invalid rows' in window.input_note.text()
+    assert window.catalogue_preview.model().rowCount() == 3
+
+
+def test_result_classification_is_displayed_and_exportable(window, tmp_path):
+    from scripts.combineresult import THRESHOLDS
+    data = {'ra': [1,2,3], 'dec': [0,0,0], 'SEDplot_votes': [6,5,0]}
+    for model in THRESHOLDS['SEDplot']:
+        data['SEDplot_' + model] = [0.5,0.5,None]
+    path = tmp_path / 'labels.csv'
+    pd.DataFrame(data).to_csv(path, index=False)
+    window._load_results(path)
+    assert window.results.SEDplot_classification.iloc[:2].tolist() == ['YSO','non-YSO']
+    assert pd.isna(window.results.SEDplot_classification.iloc[2])
+    assert 'Classification' in window.table.model().frame

@@ -35,6 +35,9 @@ The prefixes are `SEDplot`, `SEDrplot`, `AllWISE` and `DTDM`. For each selected 
 | `<channel>_n_models` | Integer 0–12 | Number of non-missing model predictions. |
 | `<channel>_status` | String | `complete`, `partial`, or `not_evaluated`. |
 | `<channel>_votes` | Nullable integer 0–12 | Number of available models meeting their own threshold; blank if no models evaluated. |
+| `<channel>_classification` | String or blank | `YSO` for at least 6 votes, `non-YSO` for fewer than 6, only when all 12 models evaluated; otherwise blank. |
+
+Classification is assigned independently per channel using this default six-of-twelve rule. It is a convenient selection label, not confirmation of physical source type or a calibrated probability. It does not replace the model-specific score thresholds or other scientific selection rules in NGYSO I. Use the scores and votes to apply a different rule. The GUI shows the selected channel's label and exports all available channel labels. Legacy results gain labels from their stored votes when opened/exported.
 
 Architectures: `efficientnet_b0`, `efficientnet_v2_s`, `mnasnet0_5`, `mobilenet_v3_small`, `regnet_y_400mf`, `resnet18`, `resnet50`, `resnext50_32x4d`, `shufflenet_v2_x0_5`, `squeezenet1_1`.
 
@@ -57,7 +60,7 @@ Input metadata are preserved except for coordinate normalization and the reserve
 
 ## Thresholds
 
-The following fixed thresholds are inherited from the supplied pipeline. Their selection dataset and optimization procedure have not been documented in this release. A vote uses `score >= threshold`. Editing these values changes the scientific decision rule and requires new validation.
+The fixed thresholds below follow NGYSO I; see [Scientific context and citation](PAPER.md). A vote uses `score >= threshold`. The authors confirmed the AllWISE custom-model thresholds as SmallResNet **0.500** and RCA **0.580**. Earlier DLYSO versions interchanged these two values. The authors also confirmed the SEDr SqueezeNet threshold as **0.577**, correcting the earlier value of 0.757. Recombine saved predictions to correct existing AllWISE and SEDr vote totals; model inference does not need to be repeated. Editing thresholds changes the scientific decision rule and requires validation.
 
 <!-- THRESHOLDS_START -->
 | Model | SED | Dust-aware SED | AllWISE | DTDM |
@@ -71,7 +74,7 @@ The following fixed thresholds are inherited from the supplied pipeline. Their s
 | `resnet50` | 0.484 | 0.801 | 0.501 | 0.553 |
 | `resnext50_32x4d` | 0.457 | 0.617 | 0.470 | 0.519 |
 | `shufflenet_v2_x0_5` | 0.402 | 0.757 | 0.596 | 0.408 |
-| `squeezenet1_1` | 0.194 | 0.757 | 0.365 | 0.482 |
-| `custom_resnet` | 0.470 | 0.650 | 0.580 | 0.480 |
-| `custom_rca` | 0.650 | 0.710 | 0.500 | 0.500 |
+| `squeezenet1_1` | 0.194 | 0.577 | 0.365 | 0.482 |
+| `custom_resnet` | 0.470 | 0.650 | 0.500 | 0.480 |
+| `custom_rca` | 0.650 | 0.710 | 0.580 | 0.500 |
 <!-- THRESHOLDS_END -->

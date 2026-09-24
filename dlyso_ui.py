@@ -39,6 +39,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from dlyso import validate_coordinate_frame
+from scripts.combineresult import classification_labels
 from dlyso_engine import PipelineRun
 from dlyso_runtime import VERSION, atomic_json, guard_input
 from dlyso_workflow import APP_DIR, MODALITIES, PROJECT_RE, build_commands, build_workflow  # noqa: F401
@@ -293,6 +295,7 @@ class DlysoApp(QMainWindow):
         self.runroot = None
         self.results = pd.DataFrame()
         self.preview_cache = {}
+        self.input_generation = 0
         self.bridge = EventBridge(self)
         self.bridge.event.connect(self._event)
         self.setAcceptDrops(True)
@@ -578,7 +581,7 @@ class DlysoApp(QMainWindow):
         outer.addLayout(body, 1)
         outer.addWidget(
             label(
-                "Votes count models above their individual thresholds. Agreement is not a calibrated probability.",
+                "Classification uses ≥6 of 12 votes for the selected modality. Agreement is not a calibrated probability.",
                 "muted",
                 True,
             )
@@ -617,11 +620,34 @@ class DlysoApp(QMainWindow):
     def _preview_input(self):
         path = Path(self.input_edit.text()).expanduser()
         try:
-            frame = pd.read_csv(path, nrows=4)
-            self.catalogue_preview.setModel(CatalogueModel(frame.iloc[:3, :4]))
+            self.input_generation += 1
+            generation = self.input_generation
+            frame = pd.read_csv(path, nrows=3)
+            validate_coordinate_frame(frame, path)
+            self.catalogue_preview.setModel(CatalogueModel(frame.iloc[:3, :4].rename(columns={"reference_class": "Reference"})))
             self.input_note.setText(
-                f"{path.name}  ·  Preview of the first {min(3, len(frame))} rows. Full validation runs before downloads."
+                f"{path.name}  ·  Counting valid rows…"
             )
+            def count_input():
+                total = valid_count = 0
+                try:
+                    for chunk in pd.read_csv(path, chunksize=10000):
+                        if generation != self.input_generation:
+                            return
+                        _, valid = validate_coordinate_frame(chunk, path)
+                        total += len(chunk)
+                        valid_count += int(valid.sum())
+                    note = f"{path.name} · {valid_count:,} valid rows / {total:,} total"
+                    if total != valid_count:
+                        note += f" · {total - valid_count:,} invalid rows"
+                    note += f". Preview: first {min(3, total)} rows."
+                except (OSError, ValueError) as exc:
+                    note = f"Cannot validate CSV: {exc}"
+                try:
+                    self.bridge.event.emit("input_preview", (generation, str(path), note))
+                except RuntimeError:
+                    pass  # The window may have closed during file validation.
+            threading.Thread(target=count_input, daemon=True).start()
         except (OSError, ValueError, pd.errors.ParserError) as exc:
             self.catalogue_preview.setModel(CatalogueModel())
             self.input_note.setText(
@@ -765,6 +791,11 @@ class DlysoApp(QMainWindow):
             bar.setToolTip(f"{statuses.count('complete')} of {len(steps)} stages complete; not elapsed-time progress")
 
     def _event(self, kind, payload):
+        if kind == "input_preview":
+            generation, path, note = payload
+            if generation == self.input_generation and str(Path(self.input_edit.text()).expanduser()) == path:
+                self.input_note.setText(note)
+            return
         if kind == "log":
             self.log.appendPlainText(str(payload))
         elif kind == "step":
@@ -869,6 +900,9 @@ class DlysoApp(QMainWindow):
                     )
                     if f"{modality}_votes" in frame:
                         frame[f"{modality}_votes"] = frame[f"{modality}_votes"].where(count > 0).astype("Int64")
+                        frame[f"{modality}_classification"] = classification_labels(
+                            frame[f"{modality}_votes"], count
+                        )
             self.preview_cache = {}
             self.export_button.setEnabled(True)
             self.result_button.setEnabled(True)
@@ -901,7 +935,7 @@ class DlysoApp(QMainWindow):
         self.metrics["evaluated"].setText(f"{int((count > 0).sum()):,}")
         self.metrics["missing"].setText(f"{int((count == 0).sum()):,}")
         self.results_note.setText(
-            f"{MODALITIES[modality]} · blank votes mean no evaluation. Partial coverage is shown explicitly."
+            f"{MODALITIES[modality]} · YSO: ≥6/12 votes; non-YSO: <6/12. Classification is blank for incomplete evaluations."
         )
         identifier = next((c for c in ["source_id", "name", "Name", "ID", "id"] if c in self.results), None)
         view = pd.DataFrame(index=self.results.index)
@@ -912,6 +946,7 @@ class DlysoApp(QMainWindow):
         view["Dec / deg"] = self.results["dec"]
         votes = self.results.get(f"{modality}_votes", pd.Series(np.nan, index=view.index))
         view["Votes"] = votes.where(count > 0)
+        view["Classification"] = classification_labels(votes, count)
         view["Models"] = count
         view["Coverage"] = count.map(lambda n: "Complete" if n == 12 else ("Partial" if n else "Not evaluated"))
         query = self.search.text().strip().lower()

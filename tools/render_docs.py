@@ -73,11 +73,12 @@ def main():
         path = ROOT / "docs" / f"{name}.md"
         if path.exists():
             (assets / path.name).write_text(path.read_text())
-    (assets / "coordinates.csv").write_bytes((ROOT / "examples/coordinates.csv").read_bytes())
+    for name in ["coordinates.csv", "ztf_verification.csv", "ztf_status.csv", "non_yso_references.csv"]:
+        (assets / name).write_bytes((ROOT / "examples" / name).read_bytes())
     screenshots = ""
     for name, caption in [
         ("project", "Project settings."),
-        ("results", "Results from the 11 public ZTF example sources; actual DTDM model predictions."),
+        ("results", "Results from the mixed YSO/non-YSO example catalogue; actual SED model predictions."),
     ]:
         path = ROOT / "docs/images" / f"{name}.png"
         if path.exists():

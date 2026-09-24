@@ -1,25 +1,26 @@
 {
-  "date": "2026-09-22",
+  "date": "2026-09-24",
   "catalogue": "examples/coordinates.csv",
-  "catalogue_sha256": "43ae716ff11da0c84ae6f4d9c10bd5e219afa5dd29034e252bb41cf5610b90f9",
+  "catalogue_sha256": "726b7efa7ca4dc56cb2c4fc9d1567201332ebc635668a7ff81f994b26074870d",
   "results": "docs/screenshot-results.csv",
-  "results_sha256": "ec35363feb257ad1cef30713d25f0bacd9b7360293e6fdaa5bb7fff087f900a9",
-  "channel": "DTDM",
+  "results_sha256": "533b5dec5908e4f043a7203b26246ac8460e8edd5a24178e1390bc65f41f0811",
+  "channel": "SEDplot",
   "device": "cpu",
-  "sources": 11,
+  "sources": 20,
   "models_per_source": 12,
+  "reference_sources": "examples/non_yso_references.csv",
   "archive_verification": "examples/ztf_verification.csv",
   "run_state": {
     "status": "complete",
-    "started_at": "2026-09-22T09:07:23.732932+00:00",
+    "started_at": "2026-09-24T08:15:43.183809+00:00",
     "steps": {
       "Validate input": "complete",
-      "Download ZTF light curves": "complete",
-      "Create DTDM images": "complete",
-      "Classify DTDM \u00b7 custom": "complete",
-      "Classify DTDM \u00b7 ensemble": "complete",
+      "Download SED data": "complete",
+      "Create SED plots": "complete",
+      "Classify SEDplot \u00b7 custom": "complete",
+      "Classify SEDplot \u00b7 ensemble": "complete",
       "Combine results": "complete"
     },
-    "finished_at": "2026-09-22T09:08:59.340215+00:00"
+    "finished_at": "2026-09-24T08:18:08.542989+00:00"
   }
 }

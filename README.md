@@ -65,7 +65,7 @@ For Linux system libraries, installation checks, file locations and the alternat
 
 In the app:
 
-1. Click **Use the example catalogue** (11 named sources with verified public ZTF light curves), or browse to your own CSV.
+1. Click **Use the example catalogue** (20 named sources: 11 YSOs and 9 non-YSO comparison objects), or browse to your own CSV.
 2. Choose a project name and destination. Leave **Spectral energy distribution** selected for a first run.
 3. Click **Start project**. The Activity page shows actual stage states and saves a log.
 4. Open **Results** to inspect images, individual scores and missing-data coverage.

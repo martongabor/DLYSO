@@ -81,18 +81,12 @@ def print_step_banner(step_idx: int, total: int, title: str):
 
 
 # ---------------- coordinate normalization ----------------
-def normalize_input_coords(input_csv: Path, out_csv: Path) -> Path:
-    """
-    Normalize coordinate columns to 'ra' and 'dec'.
-
-    Accepted RA names (case-insensitive):  ra, raj2000, _ra
-    Accepted DEC names (case-insensitive): dec, dej2000, _de
-    """
-    df = pd.read_csv(input_csv)
+def validate_coordinate_frame(df: pd.DataFrame, input_csv="input"):
+    """Return normalized coordinates and the validity mask, without file I/O."""
     reserved = {"_ra_key", "_dec_key", "_input_row", "_rejection_reason"}
     conflicts = [c for c in df.columns if c in reserved or c.startswith(("SEDplot_", "SEDrplot_", "AllWISE_", "DTDM_"))]
     if conflicts:
-        raise SystemExit(f"Input uses reserved output columns: {', '.join(conflicts)}")
+        raise ValueError(f"Input uses reserved output columns: {', '.join(conflicts)}")
     cols = {c.lower(): c for c in df.columns}
 
     ra_col = None
@@ -109,7 +103,7 @@ def normalize_input_coords(input_csv: Path, out_csv: Path) -> Path:
             break
 
     if ra_col is None or dec_col is None:
-        raise SystemExit(
+        raise ValueError(
             f"ERROR: Could not find coordinate columns in {input_csv}\n"
             f"Found columns: {list(df.columns)}\n"
             f"Accepted (case-insensitive): ra/dec, RAJ2000/DEJ2000, _RA/_DE"
@@ -124,6 +118,20 @@ def normalize_input_coords(input_csv: Path, out_csv: Path) -> Path:
         & df["ra"].between(0, 360, inclusive="left")
         & df["dec"].between(-90, 90)
     )
+    return df, valid
+
+
+def normalize_input_coords(input_csv: Path, out_csv: Path) -> Path:
+    """
+    Normalize coordinate columns to 'ra' and 'dec'.
+
+    Accepted RA names (case-insensitive):  ra, raj2000, _ra
+    Accepted DEC names (case-insensitive): dec, dej2000, _de
+    """
+    try:
+        df, valid = validate_coordinate_frame(pd.read_csv(input_csv), input_csv)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
     rejected = df.loc[~valid].copy()
     rejected.insert(0, "_input_row", np.flatnonzero(~valid) + 2)
     rejected["_rejection_reason"] = "Coordinates must be finite; 0 <= RA < 360 and -90 <= Dec <= 90 degrees"

@@ -1,0 +1,21 @@
+source_id,status,checked_utc,notes
+BP Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+CI Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+DL Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+DR Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+DN Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+DO Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+GM Aur,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+V409 Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+V836 Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+VY Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+IQ Tau,verified,2026-09-22,Public light curves downloaded; usable DTDM input verified.
+3C 273,request_timeout,2026-09-24,Public archive request timed out after retries; data availability not established.
+3C 279,verified,2026-09-24,Public light curve downloaded without authentication.
+Mrk 421,request_timeout,2026-09-24,Public archive request timed out after retries; data availability not established.
+Mrk 501,request_timeout,2026-09-24,Public archive request timed out after retries; data availability not established.
+BL Lac,request_timeout,2026-09-24,Public archive request timed out after retries; data availability not established.
+OJ 287,request_timeout,2026-09-24,Public archive request timed out after retries; data availability not established.
+3C 66A,request_timeout,2026-09-24,Public archive request timed out after retries; data availability not established.
+PKS 1510-089,request_timeout,2026-09-24,Public archive request timed out after retries; data availability not established.
+W Comae,request_timeout,2026-09-24,Public archive request timed out after retries; data availability not established.

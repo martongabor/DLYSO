@@ -89,3 +89,29 @@ def test_bootstrap_runs_setup_only_after_successful_package_install(monkeypatch)
         with pytest.raises(subprocess.CalledProcessError):
             install.main()
     assert run.call_count == 1
+
+
+@pytest.mark.parametrize('terminal', [True, False])
+def test_download_progress_preserves_terminal_and_log_output(tmp_path, monkeypatch, terminal):
+    import io
+    from unittest.mock import MagicMock
+    class Stream(io.StringIO):
+        def isatty(self):
+            return terminal
+    stream = Stream()
+    response = MagicMock(status_code=200, headers={'Content-Length': '6'})
+    response.iter_content.return_value = [b'abc', b'def']
+    session = MagicMock()
+    session.__enter__.return_value = session
+    session.get.return_value.__enter__.return_value = response
+    monkeypatch.setattr(setup.requests, 'Session', lambda: session)
+    monkeypatch.setattr(setup.sys, 'stdout', stream)
+    output = tmp_path / 'download.zip'
+    setup.fetch_archive(output)
+    assert output.read_bytes() == b'abcdef'
+    text = stream.getvalue()
+    assert '(100%)' in text and text.endswith('\n')
+    if terminal:
+        assert '\r' in text and text.count('\n') == 1
+    else:
+        assert '\r' not in text

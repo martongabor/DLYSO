@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import zipfile
 
@@ -63,17 +64,24 @@ def fetch_archive(destination):
             total = int(response.headers.get("Content-Length", 0))
             received = 0
             next_report = 0
-            with destination.open("wb") as output:
-                for block in response.iter_content(1024 * 1024):
-                    output.write(block)
-                    received += len(block)
-                    if received >= next_report:
-                        print(
-                            f"Model download: {received // (1024**2)} MiB"
-                            + (f" / {total // (1024**2)} MiB" if total else ""),
-                            flush=True,
-                        )
-                        next_report = received + 64 * 1024**2
+            terminal = sys.stdout.isatty()
+            def report():
+                text = f"Model download: {received / (1024**2):.1f} MiB"
+                if total:
+                    text += f" / {total / (1024**2):.1f} MiB ({min(100, received / total * 100):.0f}%)"
+                print(("\r" if terminal else "") + text, end="" if terminal else "\n", flush=True)
+            try:
+                with destination.open("wb") as output:
+                    for block in response.iter_content(1024 * 1024):
+                        output.write(block)
+                        received += len(block)
+                        if terminal or received >= next_report:
+                            report()
+                            next_report = received + 64 * 1024**2
+                report()
+            finally:
+                if terminal:
+                    print(flush=True)
 
 
 def install_archive(archive, destination, hashes):

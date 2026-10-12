@@ -1,9 +1,77 @@
 import os
 import sys
+from pathlib import Path
 from unittest.mock import patch
 
+import pandas as pd
+import pytest
+
 from dlyso_engine import PipelineRun
-from dlyso_workflow import Task, Workflow
+from dlyso_workflow import Task, Workflow, build_workflow
+from scripts.download_support import PARTIAL_DOWNLOAD_EXIT, report_stats
+
+
+@pytest.mark.parametrize("cached_key", ["ok", "cached", "skip_exists"])
+def test_download_summary_reports_partial_only_with_completed_targets(cached_key, capsys):
+    with pytest.raises(SystemExit) as error:
+        report_stats({cached_key: 4, "download_error": 1})
+    assert error.value.code == PARTIAL_DOWNLOAD_EXIT
+    assert "1 target(s) failed" in capsys.readouterr().out
+    with pytest.raises(SystemExit) as error:
+        report_stats({"empty": 4, "filtered_empty": 2, "failed": 1})
+    assert error.value.code == 1
+
+
+@pytest.mark.parametrize("modality", ["SEDplot", "AllWISE", "DTDM"])
+def test_partial_download_unlocks_classification_and_keeps_missing_rows(tmp_path, modality):
+    source = tmp_path / "coords_normalized.csv"
+    source.write_text("source_id,ra,dec\nusable,10,20\nfailed,30,40\n")
+    probabilities = tmp_path / "ClassProbs"
+    probabilities.mkdir()
+    download = "from scripts.download_support import report_stats; report_stats({'ok': 1, 'failed': 1})"
+    classify = (
+        f"from pathlib import Path; Path({str(probabilities / ('class_' + modality + '.csv'))!r})"
+        ".write_text('ra,dec,p_yso_resnet18\\n10,20,0.9\\n')"
+    )
+    tasks = [
+        Task("Download", [sys.executable, "-c", download], allow_partial_download=True),
+        Task("Plots", [sys.executable, "-c", "pass"], ("Download",)),
+        Task("Classify", [sys.executable, "-c", classify], ("Plots",), True, modality),
+    ]
+    combine = [
+        sys.executable, str(Path(__file__).resolve().parents[1] / "scripts/combineresult.py"),
+        str(source), "--classprobs", str(probabilities), "--customclass", str(tmp_path / "customClass"),
+        "--modalities", modality, "--outcsv", str(tmp_path / "result.csv"),
+    ]
+    run = PipelineRun(Workflow(tasks, ("Combine results", combine)), tmp_path, os.environ, lambda *e: None)
+    run.run()
+    assert run.state["status"] == "partial"
+    assert run.state["steps"]["Download"] == "partial"
+    assert run.state["steps"]["Classify"] == "complete"
+    result = pd.read_csv(tmp_path / "result.csv")
+    assert result.source_id.tolist() == ["usable", "failed"]
+    assert result[f"{modality}_n_models"].tolist() == [1, 0]
+    assert result[f"{modality}_votes"].iloc[0] == 1
+    assert pd.isna(result[f"{modality}_votes"].iloc[1])
+    assert result[f"{modality}_status"].iloc[1] == "not_evaluated"
+
+
+@pytest.mark.parametrize("code,allowed", [(1, True), (2, True), (PARTIAL_DOWNLOAD_EXIT, False)])
+def test_unexpected_download_exit_blocks_dependents(tmp_path, code, allowed):
+    tasks = [
+        Task("Download", [sys.executable, "-c", f"raise SystemExit({code})"], allow_partial_download=allowed),
+        Task("Classify", [sys.executable, "-c", "raise AssertionError"], ("Download",)),
+    ]
+    run = PipelineRun(Workflow(tasks), tmp_path, os.environ, lambda *e: None)
+    run.run()
+    assert run.state["status"] == "failed"
+    assert run.state["steps"]["Classify"] == "blocked"
+
+
+def test_only_download_tasks_accept_partial_exit(tmp_path):
+    workflow = build_workflow(tmp_path / "input.csv", tmp_path, ["SEDplot", "SEDrplot", "AllWISE", "DTDM"], 4, 16, True)
+    for task in workflow.tasks:
+        assert task.allow_partial_download == task.title.startswith("Download ")
 
 
 def test_ready_channel_classifies_while_other_download_waits(tmp_path):

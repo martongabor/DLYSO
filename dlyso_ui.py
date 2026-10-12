@@ -765,15 +765,16 @@ class DlysoApp(QMainWindow):
             statuses = [self.task_states.get(title, "waiting") for title in steps]
             bar, label_widget = self.stage_widgets[modality]
             bar.setRange(0, len(steps))
-            bar.setValue(statuses.count("complete"))
+            finished = sum(status in {"complete", "partial"} for status in statuses)
+            bar.setValue(finished)
             if "failed" in statuses:
                 text = "Failed"
             elif "blocked" in statuses:
                 text = "Blocked"
             elif "cancelled" in statuses:
                 text = "Stopped"
-            elif all(status == "complete" for status in statuses):
-                text = "Complete"
+            elif all(status in {"complete", "partial"} for status in statuses):
+                text = "Partial" if "partial" in statuses else "Complete"
             elif "running" in statuses:
                 title = steps[statuses.index("running")]
                 text = (
@@ -788,7 +789,7 @@ class DlysoApp(QMainWindow):
             else:
                 text = "Waiting"
             label_widget.setText(text)
-            bar.setToolTip(f"{statuses.count('complete')} of {len(steps)} stages complete; not elapsed-time progress")
+            bar.setToolTip(f"{finished} of {len(steps)} stages finished; not elapsed-time progress")
 
     def _event(self, kind, payload):
         if kind == "input_preview":

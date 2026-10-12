@@ -2,6 +2,10 @@
 
 Local release-candidate checks performed on 14–24 September 2026. This records software behavior, not a scientific benchmark.
 
+## Partial-download regression checks — 12 October 2026
+
+All 79 local tests passed. New offline checks exercise partial SED acquisition and cached-data reuse, subprocess scheduling after partial SED/AllWISE/ZTF downloads, missing-row preservation and blank votes in the real result combiner, GUI progress, and blocking of unexpected downloader exits. These checks do not rerun the full DR4 catalogue or live archive requests. Ruff passes for the GitHub release checkout.
+
 ## Environment
 
 - macOS 26.5.2, Apple Silicon (arm64).

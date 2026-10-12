@@ -192,6 +192,7 @@ class Task:
     needs: tuple[str, ...] = ()
     inference: bool = False
     modality: str | None = None
+    allow_partial_download: bool = False
 
 
 @dataclass
@@ -245,7 +246,7 @@ def build_workflow(input_csv, runroot, modalities, workers, batch_size, classify
     }
     for title, needs in dependencies.items():
         if title in commands:
-            tasks.append(Task(title, commands[title], needs))
+            tasks.append(Task(title, commands[title], needs, allow_partial_download=title.startswith("Download ")))
     ready = {
         "SEDplot": "Create SED plots",
         "SEDrplot": "Create dust-aware SED plots",

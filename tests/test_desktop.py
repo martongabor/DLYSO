@@ -141,6 +141,23 @@ def test_download_only_modality_and_cancellation_progress(window, tmp_path):
     assert bar.value() < bar.maximum()
 
 
+def test_partial_download_progress_continues_to_classification(window, tmp_path):
+    from dlyso_workflow import build_workflow
+
+    window._build_stages(build_workflow(tmp_path / "input.csv", tmp_path, ["SEDplot"], 4, 16, True))
+    window._event("step", ("Validate input", "complete"))
+    window._event("step", ("Download SED data", "partial"))
+    window._event("step", ("Create SED plots", "complete"))
+    window._event("step", ("Classify SEDplot · custom", "running"))
+    bar, state = window.stage_widgets["SEDplot"]
+    assert state.text() == "Classifying"
+    assert bar.value() == 3
+    window._event("step", ("Classify SEDplot · custom", "complete"))
+    window._event("step", ("Classify SEDplot · ensemble", "complete"))
+    assert state.text() == "Partial"
+    assert bar.value() == bar.maximum()
+
+
 def test_documentation_relative_links_and_back_navigation(window):
     from PySide6.QtCore import QUrl
 

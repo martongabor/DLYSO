@@ -6,6 +6,8 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
+PARTIAL_DOWNLOAD_EXIT = 10
+
 
 def fetch_bytes(url: str) -> bytes:
     retry = Retry(total=2, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
@@ -29,4 +31,9 @@ def report_stats(stats: dict) -> None:
     print("Download summary: " + ", ".join(f"{key}={value}" for key, value in sorted(stats.items())), flush=True)
     failed = sum(value for key, value in stats.items() if key in {"failed", "download_error", "csv_read_error"})
     if failed:
-        raise SystemExit(f"{failed} target(s) failed. Retry the same project to retrieve missing data.")
+        usable = sum(stats.get(key, 0) for key in ("ok", "cached", "skip_exists"))
+        print(f"{failed} target(s) failed. Retry the same project to retrieve missing data.", flush=True)
+        if usable:
+            print("Continuing with available data; failed targets remain missing evidence.", flush=True)
+            raise SystemExit(PARTIAL_DOWNLOAD_EXIT)
+        raise SystemExit(1)

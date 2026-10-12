@@ -33,7 +33,7 @@ def test_rejected_cutout_can_be_requested_again(tmp_path, monkeypatch):
     assert (tmp_path / "10_20.png").exists()
 
 
-def test_network_failure_remains_fatal_and_retryable(tmp_path, monkeypatch):
+def test_network_failure_remains_retryable_and_reports_partial_download(tmp_path, monkeypatch):
     calls = []
 
     def outage(**kwargs):
@@ -44,5 +44,6 @@ def test_network_failure_remains_fatal_and_retryable(tmp_path, monkeypatch):
     assert fetch(tmp_path) == "failed"
     assert fetch(tmp_path) == "failed"
     assert len(calls) == 2
-    with pytest.raises(SystemExit, match="1 target"):
+    with pytest.raises(SystemExit) as error:
         report_stats({"cached": 183, "rejected": 2, "failed": 1})
+    assert error.value.code == 10

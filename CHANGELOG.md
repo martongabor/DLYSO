@@ -2,6 +2,8 @@
 
 ## 1.1.0rc1 — release candidate
 
+- Continue plotting and classification after partial SED, AllWISE or ZTF downloads. Report partial runs, preserve retryable failures and leave missing targets unevaluated; complete download failures and unexpected errors still block dependent stages.
+
 - Expand the example catalogue to 11 YSOs and 9 named, SIMBAD-verified non-YSO comparison objects, with reference labels separate from predictions.
 - Show setup downloads on one terminal line, and report complete CSV validation counts in Project.
 - Add per-channel Classification labels to Results and CSV exports using six of twelve votes; incomplete evaluations remain unlabeled.

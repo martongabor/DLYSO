@@ -12,6 +12,7 @@ from typing import Callable
 
 from dlyso_runtime import atomic_json, require_models, terminate_tree
 from dlyso_workflow import APP_DIR
+from scripts.download_support import PARTIAL_DOWNLOAD_EXIT
 
 
 class PipelineRun:
@@ -53,7 +54,7 @@ class PipelineRun:
                 handle.write(text + "\n")
         self.emit("log", text)
 
-    def command(self, step):
+    def command(self, step, *, allow_partial_download=False):
         title, command = step
         if self.cancelled.is_set():
             raise InterruptedError
@@ -83,10 +84,14 @@ class PipelineRun:
             if self.cancelled.is_set():
                 self._record(title, "cancelled")
                 raise InterruptedError
-            if code:
+            if code == PARTIAL_DOWNLOAD_EXIT and allow_partial_download:
+                self._record(title, "partial")
+                self._log(f"{title}: some targets failed; continuing with available data. Retry this project to recover missing targets.")
+            elif code:
                 self._record(title, "failed")
                 raise RuntimeError(f"{title} failed. See the activity log; completed downloads can be reused.")
-            self._record(title, "complete")
+            else:
+                self._record(title, "complete")
         finally:
             process.stdout.close()
             with self.lock:
@@ -95,6 +100,7 @@ class PipelineRun:
     def run(self):
         completed_modalities = set()
         failures = []
+        partial_downloads = []
         try:
             tasks = {task.title: task for task in self.workflow.tasks}
             for title in tasks:
@@ -111,7 +117,7 @@ class PipelineRun:
                         if any(value in {"failed", "blocked", "cancelled"} for value in states):
                             self._record(task.title, "blocked")
                             pending.remove(task)
-                        elif all(value == "complete" for value in states):
+                        elif all(value in {"complete", "partial"} for value in states):
                             if task.inference and inference_active:
                                 continue
                             active[pool.submit(self._execute_task, task)] = task
@@ -127,6 +133,8 @@ class PipelineRun:
                         task = active.pop(future)
                         try:
                             future.result()
+                            if self.state["steps"][task.title] == "partial":
+                                partial_downloads.append(task.title)
                             if task.modality:
                                 completed_modalities.add(task.modality)
                                 refresh = True
@@ -147,6 +155,13 @@ class PipelineRun:
             if failures:
                 status = "partial" if completed_modalities else "failed"
                 message = "Run finished with errors. Successful channels are retained. " + " ".join(failures)
+            elif partial_downloads:
+                status = "partial"
+                message = (
+                    "Run finished with partial downloads: " + ", ".join(partial_downloads)
+                    + ". Available data were processed; missing targets remain not_evaluated. "
+                    "Retry this project to recover missing data."
+                )
             else:
                 status, message = "complete", "Run complete. Review coverage before interpreting predictions."
         except InterruptedError:
@@ -170,7 +185,7 @@ class PipelineRun:
             flag = "--types" if "--types" in task.command else "--folders"
             if flag in task.command:
                 require_models(task.command[task.command.index(flag) + 1].split(","))
-        self.command((task.title, task.command))
+        self.command((task.title, task.command), allow_partial_download=task.allow_partial_download)
 
     def _combine(self, completed_modalities):
         title, command = self.workflow.combine

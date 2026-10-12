@@ -108,7 +108,7 @@ python dlyso.py examples/coordinates.csv --runroot runs/infrared --steps allwise
 python dlyso.py --help
 ```
 
-Each channel starts classification as soon as its representation is ready, independently of slower downloads. Failed channels do not cancel healthy ones; results appear incrementally. The desktop supports arbitrary channel combinations. CLI `all` selects all four channels, including dust-aware SEDs; install CSFD maps first. CLI `sed_classify` also includes the dust-aware channel. [CLI reference →](docs/CLI_REFERENCE.md)
+Each channel starts classification as soon as its representation is ready, independently of slower downloads. Partial downloads continue to classification using available files; failed targets remain not_evaluated and can be retried. Failed channels do not cancel healthy ones; results appear incrementally. The desktop supports arbitrary channel combinations. CLI `all` selects all four channels, including dust-aware SEDs; install CSFD maps first. CLI `sed_classify` also includes the dust-aware channel. [CLI reference →](docs/CLI_REFERENCE.md)
 
 ## Documentation
 

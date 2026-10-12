@@ -91,6 +91,30 @@ def test_legacy_sed_placeholder_is_retried(tmp_path):
         fetch.assert_called_once()
 
 
+def test_sed_download_main_preserves_usable_data_on_partial_failure(tmp_path, monkeypatch):
+    from scripts.download_support import PARTIAL_DOWNLOAD_EXIT
+
+    source = tmp_path / "input.csv"
+    source.write_text("ra,dec\n10,20\n30,40\n")
+    output = tmp_path / "SEDcsv"
+    table = Table({"sed_freq": [1.0], "sed_flux": [2.0], "sed_filter": ["test"]})
+
+    def fetch(target, radius):
+        if target.startswith("30"):
+            raise TimeoutError("archive timeout")
+        return table
+
+    monkeypatch.setattr(sed_download_parallel, "fetch_sed_table", fetch)
+    monkeypatch.setattr(sys, "argv", ["sed_download", str(source), "--outdir", str(output), "--workers", "1"])
+    for _ in range(2):
+        with pytest.raises(SystemExit) as error:
+            sed_download_parallel.main()
+        assert error.value.code == PARTIAL_DOWNLOAD_EXIT
+        assert len(list(output.glob("*.csv"))) == 1
+        assert len(list(output.glob("*.done"))) == 2
+    assert "FAILED" in next(p.read_text() for p in output.glob("30*.done"))
+
+
 def test_ztf_failure_is_summarized_and_retried(tmp_path):
     with patch.object(getztflc, "download_to", side_effect=RuntimeError("internal request details")) as fetch:
         for _ in range(2):

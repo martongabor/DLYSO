@@ -2,6 +2,8 @@
 
 ## 1.1.0rc1 — release candidate
 
+- Permit project resume after workflow, GUI and HTTP helper updates while retaining scientific-processing, model, catalogue and query-radius compatibility checks.
+
 - Continue plotting and classification after partial SED, AllWISE or ZTF downloads. Report partial runs, preserve retryable failures and leave missing targets unevaluated; complete download failures and unexpected errors still block dependent stages.
 
 - Expand the example catalogue to 11 YSOs and 9 named, SIMBAD-verified non-YSO comparison objects, with reference labels separate from predictions.

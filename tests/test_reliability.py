@@ -163,6 +163,28 @@ def test_resume_rejects_changed_catalogue(tmp_path):
         guard_input(tmp_path, source)
 
 
+@pytest.mark.parametrize("filename", ["dlyso_engine.py", "dlyso_ui.py", "dlyso_workflow.py", "scripts/download_support.py"])
+def test_resume_accepts_workflow_updates(tmp_path, filename):
+    source = tmp_path / "input.csv"
+    source.write_text("ra,dec\n1,2\n")
+    atomic_json(tmp_path / "run_manifest.json", {
+        "input_sha256": sha256(source), "software_sha256": {filename: "previous-version"},
+    })
+    assert guard_input(tmp_path, source) == sha256(source)
+
+
+@pytest.mark.parametrize("filename", ["dlyso.py", "scripts/sed_download_parallel.py", "scripts/class.py",
+                                         "scripts/combineresult.py", "scripts/make_sed_plots.py"])
+def test_resume_rejects_scientific_processing_changes(tmp_path, filename):
+    source = tmp_path / "input.csv"
+    source.write_text("ra,dec\n1,2\n")
+    atomic_json(tmp_path / "run_manifest.json", {
+        "input_sha256": sha256(source), "software_sha256": {filename: "previous-version"},
+    })
+    with pytest.raises(ValueError, match="software changed"):
+        guard_input(tmp_path, source)
+
+
 def test_engine_drains_output_and_saves_logs(tmp_path):
     command = ("test", [sys.executable, "-c", "print('x' * 100000)"])
     events = []

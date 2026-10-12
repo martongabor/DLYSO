@@ -13,6 +13,12 @@ from pathlib import Path
 
 VERSION = "1.1.0rc1"
 
+# These files control execution and presentation, not cached data or model inputs.
+RESUME_COMPATIBLE_FILES = frozenset({
+    "dlyso_engine.py", "dlyso_ui.py", "dlyso_workflow.py", "dlyso_runtime.py",
+    "dlyso_doctor.py", "dlyso_setup.py", "scripts/download_support.py",
+})
+
 
 def data_root() -> Path:
     """User-writable data location; independent of the Python installation."""
@@ -87,7 +93,9 @@ def guard_input(runroot: Path, input_csv: Path, radius_arcsec=None) -> str:
         root = Path(__file__).resolve().parent
         for name, expected in previous.get("software_sha256", {}).items():
             path = root / name
-            if not path.is_file() or sha256(path) != expected:
+            if not path.is_file():
+                raise ValueError("Pipeline software is missing. Restore the installation before resuming this project.")
+            if name not in RESUME_COMPATIBLE_FILES and sha256(path) != expected:
                 raise ValueError("Pipeline software changed since this project was created. Use a new project folder.")
         for name, expected in previous.get("models_sha256", {}).items():
             path = model_root() / name

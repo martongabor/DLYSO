@@ -133,7 +133,7 @@ A transient HTTP failure is retried within the bounded HTTP request policy. Vizi
 
 Click **Stop run** to terminate the active process trees. DLYSO first requests termination, then escalates for lingering processes. No new stage is scheduled after cancellation. Closing the window during a run asks whether to stop it.
 
-To resume, open the project, keep its original input catalogue and start it again. Confirm reuse of the existing artifacts. Failed SED placeholders and failed ZTF markers are retried; completed data are reused. AllWISE quality rejections are also retained; the downloader's `--retry-rejected` option explicitly requests those cutouts again. Atomic download writes prevent partial files from becoming completed artifacts.
+To resume, open the project, keep its original input catalogue and start it again. Updates to scheduling, the GUI and HTTP retry helpers permit reuse of cached data. Changes to scientific processing, model files, the input catalogue or query radius still require a new project folder. Confirm reuse of the existing artifacts. Failed SED placeholders and failed ZTF markers are retried; completed data are reused. AllWISE quality rejections are also retained; the downloader's `--retry-rejected` option explicitly requests those cutouts again. Atomic download writes prevent partial files from becoming completed artifacts.
 
 A project fingerprint ties the run to the original input bytes, processing code and model files. Changing them requires a new project folder. Even a harmless edit to the original CSV changes its fingerprint. Legacy projects without fingerprints can be inspected, but should be rerun in a new folder.
 
